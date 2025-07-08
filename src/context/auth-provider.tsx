@@ -20,18 +20,18 @@ const ONBOARDING_KEY = 'fondo_mercato_onboarding_complete';
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [onboardingComplete, setOnboardingComplete] = useState<boolean>(false);
-  const [isAuthCheckComplete, setIsAuthCheckComplete] = useState(false);
-  const [isMinLoadingTimePassed, setIsMinLoadingTimePassed] = useState(false);
+  const [isAuthLoading, setIsAuthLoading] = useState(true);
+  const [isSplashScreenDone, setIsSplashScreenDone] = useState(false);
   const router = useRouter();
   const pathname = usePathname();
 
   useEffect(() => {
-    // Minimum 5-second splash screen
-    const timer = setTimeout(() => {
-      setIsMinLoadingTimePassed(true);
+    // 5-second cosmetic splash screen timer
+    const splashTimer = setTimeout(() => {
+      setIsSplashScreenDone(true);
     }, 5000);
 
-    // This effect runs only on the client
+    // This effect runs on the client to check auth status from localStorage
     try {
       const authStatus = window.localStorage.getItem(AUTH_KEY) === 'true';
       const onboardingStatus = window.localStorage.getItem(ONBOARDING_KEY) === 'true';
@@ -40,13 +40,15 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     } catch (error) {
         console.error("Could not access localStorage", error);
     }
-    setIsAuthCheckComplete(true);
+    // Mark the auth check as complete
+    setIsAuthLoading(false);
     
-    return () => clearTimeout(timer);
+    return () => clearTimeout(splashTimer);
   }, []);
 
   useEffect(() => {
-    if (!isAuthCheckComplete || !isMinLoadingTimePassed) return;
+    // Wait until both the splash screen is done AND auth is loaded to perform redirects
+    if (isAuthLoading || !isSplashScreenDone) return;
 
     const publicRoutes = ['/login', '/signup'];
     const isOnboardingRoute = pathname === '/onboarding';
@@ -58,7 +60,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     } else if (isAuthenticated && !onboardingComplete && !isOnboardingRoute) {
       router.push('/onboarding');
     }
-  }, [isAuthenticated, onboardingComplete, isAuthCheckComplete, isMinLoadingTimePassed, pathname, router]);
+  }, [isAuthenticated, onboardingComplete, isAuthLoading, isSplashScreenDone, pathname, router]);
 
   const login = () => {
     window.localStorage.setItem(AUTH_KEY, 'true');
@@ -94,18 +96,16 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const value = { isAuthenticated, login, logout, signup, completeOnboarding };
 
-  const isLoading = !isAuthCheckComplete || !isMinLoadingTimePassed;
-
-  if (isLoading) {
-    return (
-        <LoadingScreen />
-    );
+  // Show splash screen if it's not done yet.
+  if (!isSplashScreenDone) {
+    return <LoadingScreen />;
   }
 
+  // After splash screen, if auth is still loading for any reason,
+  // return null to prevent flicker, unless we are on a public auth page.
   const isAuthPage = ['/login', '/signup', '/onboarding'].includes(pathname);
-  
-  if (!isAuthenticated && !isAuthPage) {
-    return null; // Don't render anything while redirecting
+  if (isAuthLoading && !isAuthPage) {
+    return null;
   }
 
   return (
