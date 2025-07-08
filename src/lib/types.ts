@@ -10,16 +10,18 @@ export type Transaction = {
 export type ExpenseCategory =
   | 'Groceries'
   | 'Transport'
-  | 'Housing'
+  | 'Home'
   | 'Entertainment'
   | 'Healthcare'
+  | 'Fashion'
   | 'Other';
 
 export const expenseCategories: ExpenseCategory[] = [
   'Groceries',
   'Transport',
-  'Housing',
+  'Home',
   'Entertainment',
   'Healthcare',
+  'Fashion',
   'Other',
 ];
