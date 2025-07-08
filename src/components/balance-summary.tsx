@@ -37,7 +37,7 @@ export default function BalanceSummary({ transactions }: BalanceSummaryProps) {
       <div className="flex flex-wrap gap-4">
         <div className="flex min-w-[158px] flex-1 flex-col gap-2 rounded-xl p-6 border">
           <p className="text-base font-medium leading-normal">Ingresos</p>
-          <p className="tracking-light text-2xl font-bold leading-tight">{formatCurrency(income)}</p>
+          <p className="tracking-light text-2xl font-bold leading-tight text-chart-1">{formatCurrency(income)}</p>
         </div>
         <div className="flex min-w-[158px] flex-1 flex-col gap-2 rounded-xl p-6 border">
           <p className="text-base font-medium leading-normal">Gastos</p>

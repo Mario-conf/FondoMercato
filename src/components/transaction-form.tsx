@@ -122,6 +122,13 @@ export default function TransactionForm({
     onOpenChange(open);
     if (!open) {
       setEditingTransaction(null);
+      form.reset({
+        type: 'expense',
+        amount: 0,
+        description: '',
+        date: new Date(),
+        category: '',
+      });
     }
   };
 

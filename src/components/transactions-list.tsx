@@ -51,7 +51,7 @@ export default function TransactionsList({
               <p className="text-base font-medium leading-normal line-clamp-1">{formatDate(t.date)}</p>
               <p className="text-muted-foreground text-sm font-normal leading-normal line-clamp-2 capitalize">{t.description}</p>
             </div>
-            <div className={cn("shrink-0 font-mono text-base font-normal leading-normal", t.type === 'income' ? 'text-chart-1' : 'text-foreground')}>
+            <div className="shrink-0 font-mono text-base font-normal leading-normal text-foreground">
               {t.type === 'income' ? '+' : '-'}{formatCurrency(Math.abs(t.amount))}
             </div>
           </button>
