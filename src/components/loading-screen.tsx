@@ -8,17 +8,17 @@ export default function LoadingScreen() {
   const [progress, setProgress] = useState(0);
 
   useEffect(() => {
-    // Start the progress from a small number to make it visible instantly
-    setProgress(13); 
+    // A tiny delay ensures the component has rendered before starting the animation.
+    // This triggers the CSS transition from 0 to 100 over 5 seconds.
     const timer = setTimeout(() => {
       setProgress(100);
-    }, 100); // A short delay to allow the component to render before starting the transition
+    }, 10);
 
     return () => clearTimeout(timer);
   }, []);
 
   return (
-    <div className="flex h-screen w-full flex-col items-center justify-center bg-white space-y-8">
+    <div className="flex h-screen w-full flex-col items-center justify-center bg-background space-y-8">
       <Image
         src="https://placehold.co/150x150.png"
         alt="Fondo Mercato Logo"
@@ -28,7 +28,7 @@ export default function LoadingScreen() {
         unoptimized
       />
       <div className="w-64">
-         <Progress value={progress} className="h-2 bg-gray-200" indicatorClassName="bg-primary transition-all duration-[5000ms] ease-linear" />
+         <Progress value={progress} className="h-2 bg-accent" indicatorClassName="bg-primary transition-all duration-[5000ms] ease-linear" />
       </div>
     </div>
   );
