@@ -42,6 +42,11 @@ interface DataContextType {
   setBudgetFormOpen: (isOpen: boolean) => void;
   editingBudget: Budget | null;
   setEditingBudget: (budget: Budget | null) => void;
+
+  overallBudget: { [month: string]: number };
+  updateOverallBudget: (month: string, amount: number) => void;
+  isOverallBudgetFormOpen: boolean;
+  setOverallBudgetFormOpen: (isOpen: boolean) => void;
 }
 
 const DataContext = createContext<DataContextType | undefined>(undefined);
@@ -53,18 +58,24 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
     useState<Transaction | null>(null);
   const [expenseCategories, setExpenseCategories] = useState<string[]>([]);
   const [incomeCategories, setIncomeCategories] = useState<string[]>([]);
-  
+
   // Budget state
   const [budgets, setBudgets] = useState<Budget[]>([]);
   const [isBudgetFormOpen, setBudgetFormOpen] = useState(false);
   const [editingBudget, setEditingBudget] = useState<Budget | null>(null);
 
+  // Overall Budget state
+  const [overallBudget, setOverallBudget] = useState<{
+    [month: string]: number;
+  }>({});
+  const [isOverallBudgetFormOpen, setOverallBudgetFormOpen] = useState(false);
 
   useEffect(() => {
     setTransactions(storage.getTransactions());
     setExpenseCategories(storage.getExpenseCategories());
     setIncomeCategories(storage.getIncomeCategories());
     setBudgets(storage.getBudgets());
+    setOverallBudget(storage.getOverallBudget());
   }, []);
 
   const addTransaction = useCallback(
@@ -209,31 +220,62 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
   );
 
   // Budget management functions
-  const addBudget = useCallback((budgetData: Omit<Budget, 'id'>) => {
-    // A user can only have one budget per category per month
-    const existingBudget = budgets.find(b => b.category === budgetData.category && b.month === budgetData.month);
-    if (existingBudget) {
+  const addBudget = useCallback(
+    (budgetData: Omit<Budget, 'id'>) => {
+      // A user can only have one budget per category per month
+      const existingBudget = budgets.find(
+        (b) =>
+          b.category === budgetData.category && b.month === budgetData.month
+      );
+      if (existingBudget) {
         updateBudget(existingBudget.id, budgetData);
         return;
-    }
+      }
 
-    const newBudget = { ...budgetData, id: new Date().toISOString() + Math.random() };
-    const updatedBudgets = [...budgets, newBudget];
-    setBudgets(updatedBudgets);
-    storage.saveBudgets(updatedBudgets);
-  }, [budgets]);
+      const newBudget = {
+        ...budgetData,
+        id: new Date().toISOString() + Math.random(),
+      };
+      const updatedBudgets = [...budgets, newBudget];
+      setBudgets(updatedBudgets);
+      storage.saveBudgets(updatedBudgets);
+    },
+    [budgets]
+  );
 
-  const updateBudget = useCallback((id: string, budgetData: Omit<Budget, 'id'>) => {
-    const updatedBudgets = budgets.map(b => (b.id === id ? { id, ...budgetData } : b));
-    setBudgets(updatedBudgets);
-    storage.saveBudgets(updatedBudgets);
-  }, [budgets]);
+  const updateBudget = useCallback(
+    (id: string, budgetData: Omit<Budget, 'id'>) => {
+      const updatedBudgets = budgets.map((b) =>
+        b.id === id ? { id, ...budgetData } : b
+      );
+      setBudgets(updatedBudgets);
+      storage.saveBudgets(updatedBudgets);
+    },
+    [budgets]
+  );
 
-  const deleteBudget = useCallback((id: string) => {
-    const updatedBudgets = budgets.filter(b => b.id !== id);
-    setBudgets(updatedBudgets);
-    storage.saveBudgets(updatedBudgets);
-  }, [budgets]);
+  const deleteBudget = useCallback(
+    (id: string) => {
+      const updatedBudgets = budgets.filter((b) => b.id !== id);
+      setBudgets(updatedBudgets);
+      storage.saveBudgets(updatedBudgets);
+    },
+    [budgets]
+  );
+
+  const updateOverallBudget = useCallback(
+    (month: string, amount: number) => {
+      const updatedOverallBudget = { ...overallBudget };
+      if (amount > 0) {
+        updatedOverallBudget[month] = amount;
+      } else {
+        delete updatedOverallBudget[month];
+      }
+      setOverallBudget(updatedOverallBudget);
+      storage.saveOverallBudget(updatedOverallBudget);
+    },
+    [overallBudget]
+  );
 
   const value = {
     transactions,
@@ -260,6 +302,10 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
     setBudgetFormOpen,
     editingBudget,
     setEditingBudget,
+    overallBudget,
+    updateOverallBudget,
+    isOverallBudgetFormOpen,
+    setOverallBudgetFormOpen,
   };
 
   return (

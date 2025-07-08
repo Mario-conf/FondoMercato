@@ -6,6 +6,7 @@ import AddTransactionButton from '@/components/add-transaction-button';
 import TransactionForm from '@/components/transaction-form';
 import { useData } from '@/context/data-provider';
 import BudgetForm from './budget-form';
+import OverallBudgetForm from './overall-budget-form';
 
 export default function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -14,6 +15,8 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
     setTransactionFormOpen,
     isBudgetFormOpen,
     setBudgetFormOpen,
+    isOverallBudgetFormOpen,
+    setOverallBudgetFormOpen,
   } = useData();
 
   const showNav = !['/login', '/signup', '/onboarding'].includes(pathname);
@@ -33,6 +36,10 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
           <BudgetForm
             isOpen={isBudgetFormOpen}
             onOpenChange={setBudgetFormOpen}
+          />
+          <OverallBudgetForm
+            isOpen={isOverallBudgetFormOpen}
+            onOpenChange={setOverallBudgetFormOpen}
           />
         </>
       )}

@@ -2,7 +2,7 @@
 
 import { Progress } from '@/components/ui/progress';
 import { useData } from '@/context/data-provider';
-import { isSameMonth } from 'date-fns';
+import { isSameMonth, format } from 'date-fns';
 
 const formatCurrency = (value: number) => {
   return new Intl.NumberFormat('en-US', {
@@ -14,12 +14,25 @@ const formatCurrency = (value: number) => {
 };
 
 export default function OverallBudget() {
-  const { budgets, transactions } = useData();
+  const {
+    overallBudget,
+    budgets,
+    transactions,
+    setOverallBudgetFormOpen,
+  } = useData();
   const currentMonth = new Date();
+  const monthKey = format(currentMonth, 'yyyy-MM');
 
-  const totalBudget = budgets
-    .filter((b) => b.month === `${currentMonth.getFullYear()}-${(currentMonth.getMonth() + 1).toString().padStart(2, '0')}`)
+  const userSetOverallBudget = overallBudget[monthKey];
+
+  const categoryBudgetsTotal = budgets
+    .filter((b) => b.month === monthKey)
     .reduce((sum, b) => sum + b.amount, 0);
+
+  const totalBudget =
+    typeof userSetOverallBudget === 'number'
+      ? userSetOverallBudget
+      : categoryBudgetsTotal;
 
   const spent = transactions
     .filter(
@@ -29,8 +42,15 @@ export default function OverallBudget() {
 
   const progress = totalBudget > 0 ? (spent / totalBudget) * 100 : 0;
 
+  const handleEdit = () => {
+    setOverallBudgetFormOpen(true);
+  };
+
   return (
-    <div className="flex flex-col gap-3">
+    <button
+      onClick={handleEdit}
+      className="w-full text-left flex flex-col gap-3 rounded-xl hover:bg-accent/50 transition-colors p-4 bg-secondary"
+    >
       <div className="flex gap-6 justify-between items-center">
         <p className="text-base font-medium leading-normal">
           Restante este Mes
@@ -44,6 +64,6 @@ export default function OverallBudget() {
         </p>
       </div>
       <Progress value={progress} className="h-2 bg-accent" />
-    </div>
+    </button>
   );
 }

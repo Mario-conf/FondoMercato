@@ -6,6 +6,8 @@ const TRANSACTIONS_KEY = 'fintrack_transactions';
 const EXPENSE_CATEGORIES_KEY = 'fintrack_expense_categories';
 const INCOME_CATEGORIES_KEY = 'fintrack_income_categories';
 const BUDGETS_KEY = 'fintrack_budgets';
+const OVERALL_BUDGET_KEY = 'fintrack_overall_budget';
+
 
 // This function acts as a separation layer. In the future, this could
 // be replaced with an API call to a MySQL database.
@@ -106,4 +108,19 @@ export const getBudgets = (): Budget[] => {
         return data ? JSON.parse(data) : [];
     }
     return [];
+};
+
+// Functions for Overall Budget
+export const saveOverallBudget = (budget: { [month: string]: number }): void => {
+    if (typeof window !== 'undefined') {
+        window.localStorage.setItem(OVERALL_BUDGET_KEY, JSON.stringify(budget));
+    }
+};
+
+export const getOverallBudget = (): { [month: string]: number } => {
+    if (typeof window !== 'undefined') {
+        const data = window.localStorage.getItem(OVERALL_BUDGET_KEY);
+        return data ? JSON.parse(data) : {};
+    }
+    return {};
 };
