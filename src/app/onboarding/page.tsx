@@ -83,18 +83,16 @@ export default function OnboardingPage() {
             {onboardingSteps.map((step, index) => (
               <CarouselItem key={index}>
                 <div className="flex flex-col items-center text-center">
-                  <div className="@container">
-                    <div className="w-full @[480px]:px-4 @[480px]:py-3">
-                      <div className="relative w-full h-[218px] @[480px]:rounded-xl overflow-hidden">
-                        <Image
-                          src={step.image}
-                          alt={step.title}
-                          fill
-                          className="object-cover bg-center"
-                          data-ai-hint={step.hint}
-                          unoptimized
-                        />
-                      </div>
+                  <div className="w-full p-4">
+                    <div className="relative mx-auto w-full max-w-sm aspect-video overflow-hidden rounded-xl">
+                      <Image
+                        src={step.image}
+                        alt={step.title}
+                        fill
+                        className="object-cover"
+                        data-ai-hint={step.hint}
+                        unoptimized
+                      />
                     </div>
                   </div>
                   <h1 className="text-foreground text-[22px] font-bold leading-tight tracking-[-0.015em] px-4 text-center pb-3 pt-5 font-headline">
