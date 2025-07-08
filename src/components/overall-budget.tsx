@@ -1,4 +1,3 @@
-import { Card, CardContent } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 
 const formatCurrency = (value: number) => {
@@ -11,24 +10,18 @@ const formatCurrency = (value: number) => {
 };
 
 export default function OverallBudget() {
+  // Static data for now. In a real implementation, this would come from props or context.
+  const totalBudget = 0;
+  const spent = 0;
+  const progress = totalBudget > 0 ? (spent / totalBudget) * 100 : 0;
+
   return (
-    <Card>
-      <CardContent className="pt-6 space-y-4">
-        <div>
-          <div className="flex justify-between items-center mb-2">
-            <div className="flex items-center gap-2">
-              <span className="font-semibold">General Mensual</span>
-              <span className="text-xs text-muted-foreground">este mes</span>
-            </div>
-            <span className="font-semibold">{formatCurrency(0)}</span>
-          </div>
-          <Progress value={0} className="h-2" />
-          <div className="flex justify-between items-center mt-2 text-sm text-muted-foreground">
-            <span>Gastado 0%</span>
-            <span>{formatCurrency(0)} restantes este mes</span>
-          </div>
-        </div>
-      </CardContent>
-    </Card>
+    <div className="flex flex-col gap-3">
+      <div className="flex gap-6 justify-between items-center">
+        <p className="text-base font-medium leading-normal">Presupuesto Mensual</p>
+        <p className="text-sm font-normal leading-normal text-muted-foreground">{formatCurrency(totalBudget)}</p>
+      </div>
+      <Progress value={progress} className="h-2 bg-accent" />
+    </div>
   );
 }

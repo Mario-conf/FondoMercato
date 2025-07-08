@@ -1,4 +1,4 @@
-import { Car, Home, MoreHorizontal, Shirt, ShoppingCart, TrendingUp, Lightbulb, Martini, Gamepad2, Pill, Landmark, Plane, Gift, Ticket, UtensilsCrossed } from 'lucide-react';
+import { Car, Home, MoreHorizontal, Shirt, ShoppingCart, TrendingUp, Lightbulb, Martini, Gamepad2, Pill, Landmark, Plane, Gift, FilmSlate, UtensilsCrossed } from 'lucide-react';
 import type { ExpenseCategory } from '@/lib/types';
 
 interface CategoryIconProps {
@@ -6,7 +6,7 @@ interface CategoryIconProps {
 }
 
 const iconMap: Record<ExpenseCategory | 'Ingresos', React.ElementType> = {
-  Ocio: Ticket,
+  Ocio: FilmSlate,
   Hogar: Home,
   Salud: Pill,
   Moda: Shirt,

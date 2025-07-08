@@ -3,26 +3,28 @@
 import Budgets from '@/components/budgets';
 import OverallBudget from '@/components/overall-budget';
 import { Button } from '@/components/ui/button';
-import { useData } from '@/context/data-provider';
 
 export default function BudgetsPage() {
-  // Although we are not using data here yet,
-  // making this a client component prepares it for future budget logic.
-  const { transactions } = useData();
 
   return (
     <div className="min-h-screen bg-background text-foreground">
-      <main className="mx-auto max-w-lg px-4 py-8">
-        <h1 className="text-4xl font-headline font-bold tracking-tight md:text-5xl text-center mb-8">
-          PLANIFICA TU <span className="text-primary">PRESUPUESTO</span>
-        </h1>
-        <div className="space-y-8">
-          <OverallBudget />
-          <Budgets />
-          <Button variant="outline" className="w-full h-12 text-base font-semibold">
-            Crear Nuevo Presupuesto
-          </Button>
+       <header className="flex items-center p-4 pb-2 justify-center">
+            <h1 className="text-lg font-bold leading-tight tracking-[-0.015em]">
+                Presupuestos
+            </h1>
+        </header>
+      <main className="p-4 space-y-8">
+        <div>
+            <h2 className="text-white text-[22px] font-bold leading-tight tracking-[-0.015em] pb-3">Presupuesto General</h2>
+            <OverallBudget />
         </div>
+        <div>
+            <h2 className="text-white text-[22px] font-bold leading-tight tracking-[-0.015em] pb-3">Presupuestos por Categoría</h2>
+            <Budgets />
+        </div>
+        <Button className="w-full h-12 text-base font-semibold">
+            Crear Presupuesto
+        </Button>
       </main>
     </div>
   );
