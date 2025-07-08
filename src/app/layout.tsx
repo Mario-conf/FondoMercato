@@ -1,12 +1,12 @@
 import type { Metadata } from 'next';
 import './globals.css';
 import { Toaster } from '@/components/ui/toaster';
-import BottomNav from '@/components/bottom-nav';
 import { DataProvider } from '@/context/data-provider';
-import AddTransactionButton from '@/components/add-transaction-button';
+import { AuthProvider } from '@/context/auth-provider';
+import AppShell from '@/components/app-shell';
 
 export const metadata: Metadata = {
-  title: 'FinTrack',
+  title: 'Fondo Mercato',
   description: 'Track your finances with ease and intelligence.',
 };
 
@@ -30,12 +30,14 @@ export default function RootLayout({
         />
       </head>
       <body className="font-body antialiased">
-        <DataProvider>
-          <div className="pb-16">{children}</div>
-          <BottomNav />
-          <AddTransactionButton />
-          <Toaster />
-        </DataProvider>
+        <AuthProvider>
+            <DataProvider>
+                <AppShell>
+                    {children}
+                </AppShell>
+                <Toaster />
+            </DataProvider>
+        </AuthProvider>
       </body>
     </html>
   );

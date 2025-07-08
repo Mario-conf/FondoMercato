@@ -4,7 +4,6 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import type { Transaction } from '@/lib/types';
 import * as storage from '@/lib/storage';
-import TransactionForm from '@/components/transaction-form';
 
 // Define the shape of the context data
 interface DataContextType {
@@ -54,11 +53,6 @@ export const DataProvider = ({ children }: { children: React.ReactNode }) => {
   return (
     <DataContext.Provider value={value}>
       {children}
-      <TransactionForm
-        isOpen={isTransactionFormOpen}
-        onOpenChange={setTransactionFormOpen}
-        onAddTransaction={addTransaction}
-      />
     </DataContext.Provider>
   );
 };
