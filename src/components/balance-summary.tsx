@@ -2,21 +2,16 @@
 
 import { useMemo } from 'react';
 import type { Transaction } from '@/lib/types';
-import { Card, CardContent } from '@/components/ui/card';
-import { cn } from '@/lib/utils';
 
 interface BalanceSummaryProps {
   transactions: Transaction[];
 }
 
 const formatCurrency = (value: number) => {
-  return (
-    new Intl.NumberFormat('en-US', {
-      style: 'decimal',
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 0,
-    }).format(value) + '$'
-  );
+  return new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+  }).format(value);
 };
 
 export default function BalanceSummary({ transactions }: BalanceSummaryProps) {
@@ -36,21 +31,19 @@ export default function BalanceSummary({ transactions }: BalanceSummaryProps) {
   }, [transactions]);
 
   return (
-    <Card className="border-none shadow-none bg-transparent">
-      <CardContent className="p-6 text-center flex flex-col items-center">
-        <p className="text-sm text-muted-foreground">Balance Neto</p>
-        <p className="text-5xl font-bold font-headline tracking-tighter mt-1">
-          {formatCurrency(total)}
-        </p>
-        <div className="flex gap-4 mt-2">
-          <div className="text-chart-1 font-semibold">
-            {formatCurrency(income)}
-          </div>
-          <div className="text-chart-2 font-semibold">
-            {formatCurrency(expenses)}
-          </div>
+    <div>
+      <h2 className="text-[22px] font-bold leading-tight tracking-[-0.015em]">Balance Neto</h2>
+      <h2 className="tracking-light text-center text-[28px] font-bold leading-tight py-5">{formatCurrency(total)}</h2>
+      <div className="flex flex-wrap gap-4">
+        <div className="flex min-w-[158px] flex-1 flex-col gap-2 rounded-xl p-6 border">
+          <p className="text-base font-medium leading-normal">Ingresos</p>
+          <p className="tracking-light text-2xl font-bold leading-tight">{formatCurrency(income)}</p>
         </div>
-      </CardContent>
-    </Card>
+        <div className="flex min-w-[158px] flex-1 flex-col gap-2 rounded-xl p-6 border">
+          <p className="text-base font-medium leading-normal">Gastos</p>
+          <p className="tracking-light text-2xl font-bold leading-tight">{formatCurrency(expenses)}</p>
+        </div>
+      </div>
+    </div>
   );
 }

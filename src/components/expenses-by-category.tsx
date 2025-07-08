@@ -1,22 +1,40 @@
 'use client';
 
-import { useMemo } from 'react';
-import { Card, CardContent } from '@/components/ui/card';
+import React, { useMemo } from 'react';
 import type { Transaction, ExpenseCategory } from '@/lib/types';
-import CategoryIcon from './category-icon';
+import { Car, Home, MoreHorizontal, Shirt, ShoppingCart, TrendingUp, Lightbulb, Martini, Gamepad2, Pill, Landmark, Plane, Gift, Ticket, UtensilsCrossed } from 'lucide-react';
+
 
 interface ExpensesByCategoryProps {
   transactions: Transaction[];
 }
 
 const formatCurrency = (value: number) => {
-  return (
-    new Intl.NumberFormat('en-US', {
-      style: 'decimal',
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 0,
-    }).format(value) + '$'
-  );
+  return new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+  }).format(value);
+};
+
+const iconMap: Record<ExpenseCategory | 'Ingresos', React.ElementType> = {
+  Ocio: Ticket,
+  Hogar: Home,
+  Salud: Pill,
+  Moda: Shirt,
+  Servicios: Lightbulb,
+  Comida: UtensilsCrossed,
+  Deporte: Gamepad2,
+  Transporte: Car,
+  Inversiones: Landmark,
+  Viajes: Plane,
+  Regalos: Gift,
+  Otros: MoreHorizontal,
+  Ingresos: TrendingUp,
+};
+
+const CategoryIcon = ({ category }: { category: ExpenseCategory }) => {
+    const Icon = iconMap[category] || MoreHorizontal;
+    return <Icon className="h-6 w-6" />;
 };
 
 export default function ExpensesByCategory({ transactions }: ExpensesByCategoryProps) {
@@ -44,25 +62,22 @@ export default function ExpensesByCategory({ transactions }: ExpensesByCategoryP
   }, [transactions]);
 
   return (
-    <Card>
-      <CardContent className="pt-6">
-        <div className="space-y-6">
-          {expensesByCategory.length > 0 ? (
-            expensesByCategory.map(({ category, amount, count }) => (
-              <div key={category} className="flex items-center gap-4">
+    <div className="space-y-0">
+      {expensesByCategory.length > 0 ? (
+        expensesByCategory.map(({ category, amount }) => (
+          <div key={category} className="flex items-center gap-4 min-h-[72px] py-2">
+            <div className="text-white flex items-center justify-center rounded-lg bg-accent shrink-0 size-12">
                 <CategoryIcon category={category} />
-                <div className="flex-1">
-                  <p className="font-semibold">{category}</p>
-                  <p className="text-xs text-muted-foreground">x{count}</p>
-                </div>
-                <div className="text-lg font-bold font-mono">{formatCurrency(amount)}</div>
-              </div>
-            ))
-          ) : (
-            <div className="py-8 text-center text-muted-foreground">No hay gastos para mostrar.</div>
-          )}
-        </div>
-      </CardContent>
-    </Card>
+            </div>
+            <div className="flex-1 flex flex-col justify-center">
+              <p className="text-base font-medium leading-normal line-clamp-1">{category}</p>
+              <p className="text-muted-foreground text-sm font-normal leading-normal line-clamp-2">{formatCurrency(amount)}</p>
+            </div>
+          </div>
+        ))
+      ) : (
+        <div className="py-8 text-center text-muted-foreground">No hay gastos para mostrar.</div>
+      )}
+    </div>
   );
 }

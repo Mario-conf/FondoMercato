@@ -4,41 +4,41 @@
 
 @layer base {
   :root {
-    --background: 0 0% 7%; /* Almost Black */
-    --foreground: 210 20% 98%; /* White */
+    --background: 338 38% 10%; /* #240f16 */
+    --foreground: 0 0% 100%; /* White */
 
-    --card: 0 0% 12%; /* Dark Grey */
-    --card-foreground: 210 20% 98%; /* White */
+    --card: 338 38% 10%;
+    --card-foreground: 0 0% 100%;
 
-    --popover: 0 0% 7%;
-    --popover-foreground: 210 20% 98%;
+    --popover: 338 38% 10%;
+    --popover-foreground: 0 0% 100%;
 
-    --primary: 337 100% 50%; /* #ff005d */
-    --primary-foreground: 0 0% 100%; /* White */
+    --primary: 339 100% 50%; /* #ff0055 */
+    --primary-foreground: 0 0% 100%;
 
-    --secondary: 0 0% 15%; /* Grey */
-    --secondary-foreground: 210 20% 80%; /* Almost-white grey */
+    --secondary: 339 38% 15%; /* #361721 for nav */
+    --secondary-foreground: 339 31% 68%; /* #ce8da3 for inactive nav text */
 
-    --muted: 0 0% 15%; /* Grey */
-    --muted-foreground: 210 20% 80%; /* Almost-white grey */
+    --muted: 339 38% 15%;
+    --muted-foreground: 339 31% 68%;
 
-    --accent: 0 0% 20%; /* Lighter Grey for hover */
-    --accent-foreground: 210 20% 98%; /* White */
+    --accent: 339 41% 21%; /* #4b202e for borders and hover */
+    --accent-foreground: 0 0% 100%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 0 0% 20%;
-    --input: 0 0% 20%;
-    --ring: 337 100% 50%; /* #ff005d */
+    --border: 339 34% 33%; /* #6b2e42 */
+    --input: 339 41% 21%;
+    --ring: 339 100% 50%;
 
-    --chart-1: 142 71% 45%; /* Green */
-    --chart-2: 0 84% 60%; /* Red (Destructive) */
-    --chart-3: 337 100% 50%; /* Pink/Red (Primary) */
+    --chart-1: 142 71% 45%; /* Green for income */
+    --chart-2: 0 84% 60%; /* Red for expense */
+    --chart-3: 339 100% 50%; /* Primary */
     --chart-4: 221 83% 53%; /* Blue */
     --chart-5: 48 96% 51%;  /* Yellow */
     
-    --radius: 0.5rem;
+    --radius: 0.75rem;
   }
 }
 

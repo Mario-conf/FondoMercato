@@ -1,74 +1,96 @@
 'use client';
 
-import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis, Tooltip, Legend } from 'recharts';
+import React, { useMemo } from 'react';
 import type { Transaction } from '@/lib/types';
-import { Card, CardContent, CardHeader } from '@/components/ui/card';
-import { useMemo } from 'react';
+import { es } from 'date-fns/locale';
 
 interface OverviewChartProps {
   transactions: Transaction[];
 }
 
+const formatCurrency = (value: number) => {
+  return new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+  }).format(value);
+};
+
 export default function OverviewChart({ transactions }: OverviewChartProps) {
-  const data = useMemo(() => {
-    const monthlyData: { [key: string]: { name: string, income: number; expense: number } } = {};
+  const { chartData, totalNet } = useMemo(() => {
+    const monthlyData: { [key: string]: { income: number; expense: number } } = {};
     const sixMonthsAgo = new Date();
     sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 5);
     sixMonthsAgo.setDate(1);
 
+    // Initialize months
     for (let i = 0; i < 6; i++) {
-        const month = new Date(sixMonthsAgo);
-        month.setMonth(sixMonthsAgo.getMonth() + i);
-        const monthKey = month.toLocaleString('default', { month: 'short', year: '2-digit' });
-        monthlyData[monthKey] = { name: monthKey.split(' ')[0], income: 0, expense: 0 };
+      const date = new Date(sixMonthsAgo);
+      date.setMonth(date.getMonth() + i);
+      const monthKey = format(date, 'MMM');
+      monthlyData[monthKey] = { income: 0, expense: 0 };
     }
+    
+    let totalIncome = 0;
+    let totalExpenses = 0;
 
     transactions.forEach(t => {
-        if (t.date >= sixMonthsAgo) {
-            const monthKey = t.date.toLocaleString('default', { month: 'short', year: '2-digit' });
-            if (monthlyData[monthKey]) {
-                if (t.type === 'income') {
-                    monthlyData[monthKey].income += t.amount;
-                } else {
-                    monthlyData[monthKey].expense += t.amount;
-                }
-            }
+      if (t.date >= sixMonthsAgo) {
+        const monthKey = format(t.date, 'MMM');
+        if (monthlyData[monthKey]) {
+          if (t.type === 'income') {
+            monthlyData[monthKey].income += t.amount;
+          } else {
+            monthlyData[monthKey].expense += t.amount;
+          }
         }
+      }
+      if (t.type === 'income') totalIncome += t.amount;
+      else totalExpenses += t.amount;
     });
 
-    return Object.values(monthlyData);
+    const values = Object.values(monthlyData).map(d => d.income - d.expense);
+    const maxVal = Math.max(...values, 1);
+
+    const chartData = Object.entries(monthlyData).map(([name, data]) => ({
+      name,
+      height: `${Math.max(10, (data.income / maxVal) * 100)}%`, // Using income for bar height as per mockup style
+    }));
+
+    return { chartData, totalNet: totalIncome - totalExpenses };
   }, [transactions]);
 
+  // Helper to format date because date-fns is not available on server components by default
+  const format = (date: Date, fmt: string) => {
+    return date.toLocaleString('es-ES', { month: 'short' });
+  }
 
   return (
-    <Card className="h-full">
-      <CardHeader>
-      </CardHeader>
-      <CardContent className="h-[280px]">
-        {data.length > 0 ? (
-          <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={data}>
-              <XAxis dataKey="name" stroke="hsl(var(--muted-foreground))" fontSize={12} tickLine={false} axisLine={false} />
-              <YAxis stroke="hsl(var(--muted-foreground))" fontSize={12} tickLine={false} axisLine={false} tickFormatter={(value) => `$${value}`} />
-              <Tooltip
-                contentStyle={{
-                  backgroundColor: 'hsl(var(--background))',
-                  borderColor: 'hsl(var(--border))',
-                  borderRadius: 'var(--radius)',
-                }}
-                cursor={{ fill: 'hsl(var(--secondary))' }}
-              />
-              <Legend wrapperStyle={{fontSize: "12px"}}/>
-              <Bar dataKey="income" fill="hsl(var(--chart-1))" name="Ingresos" radius={[4, 4, 0, 0]} />
-              <Bar dataKey="expense" fill="hsl(var(--chart-2))" name="Gastos" radius={[4, 4, 0, 0]} />
-            </BarChart>
-          </ResponsiveContainer>
+    <div className="flex flex-wrap gap-4 py-6">
+      <div className="flex min-w-72 flex-1 flex-col gap-2">
+        <p className="text-base font-medium leading-normal">Ingresos vs. Gastos</p>
+        <p className="tracking-light text-[32px] font-bold leading-tight truncate">{formatCurrency(totalNet)}</p>
+        <p className="text-muted-foreground text-base font-normal leading-normal">Últimos 6 meses</p>
+
+        {chartData.length > 0 ? (
+          <div className="grid min-h-[180px] grid-flow-col gap-6 grid-rows-[1fr_auto] items-end justify-items-center px-3 pt-4">
+            {chartData.map((item, index) => (
+              <React.Fragment key={index}>
+                <div className="w-full flex items-end justify-center">
+                  <div
+                    className="w-4/5 bg-accent"
+                    style={{ height: item.height, borderTop: '2px solid hsl(var(--muted-foreground))' }}
+                  ></div>
+                </div>
+                <p className="text-muted-foreground text-[13px] font-bold leading-normal tracking-[0.015em] capitalize">{item.name}</p>
+              </React.Fragment>
+            ))}
+          </div>
         ) : (
-          <div className="flex h-full items-center justify-center text-muted-foreground">
+          <div className="flex h-[180px] items-center justify-center text-muted-foreground">
             No hay suficientes datos para mostrar el gráfico.
           </div>
         )}
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   );
 }
