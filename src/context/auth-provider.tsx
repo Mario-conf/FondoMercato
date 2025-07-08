@@ -21,14 +21,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [onboardingComplete, setOnboardingComplete] = useState<boolean>(false);
   const [isAuthLoading, setIsAuthLoading] = useState(true);
-  const [isSplashScreenDone, setIsSplashScreenDone] = useState(false);
+  const [isSplashScreenVisible, setIsSplashScreenVisible] = useState(true);
   const router = useRouter();
   const pathname = usePathname();
 
   useEffect(() => {
     // 3-second cosmetic splash screen timer
     const splashTimer = setTimeout(() => {
-      setIsSplashScreenDone(true);
+      setIsSplashScreenVisible(false);
     }, 3000);
 
     // This effect runs on the client to check auth status from localStorage
@@ -47,8 +47,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   useEffect(() => {
-    // Wait until both the splash screen is done AND auth is loaded to perform redirects
-    if (isAuthLoading || !isSplashScreenDone) return;
+    // Wait until auth is loaded to perform redirects
+    if (isAuthLoading) return;
+    
+    // But don't redirect away from the splash screen while it's visible
+    if (isSplashScreenVisible) return;
 
     const publicRoutes = ['/login', '/signup'];
     const isOnboardingRoute = pathname === '/onboarding';
@@ -60,7 +63,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     } else if (isAuthenticated && !onboardingComplete && !isOnboardingRoute) {
       router.push('/onboarding');
     }
-  }, [isAuthenticated, onboardingComplete, isAuthLoading, isSplashScreenDone, pathname, router]);
+  }, [isAuthenticated, onboardingComplete, isAuthLoading, isSplashScreenVisible, pathname, router]);
 
   const login = () => {
     window.localStorage.setItem(AUTH_KEY, 'true');
@@ -97,7 +100,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const value = { isAuthenticated, login, logout, signup, completeOnboarding };
 
   // Show splash screen if it's not done yet.
-  if (!isSplashScreenDone) {
+  if (isSplashScreenVisible) {
     return <LoadingScreen />;
   }
 

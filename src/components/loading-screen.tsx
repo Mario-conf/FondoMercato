@@ -18,7 +18,7 @@ export default function LoadingScreen() {
   }, []);
 
   return (
-    <div className="flex h-screen w-full flex-col items-center justify-center bg-background space-y-8">
+    <div className="flex h-screen w-full flex-col items-center justify-center bg-white space-y-8">
       <Image
         src="https://placehold.co/150x150.png"
         alt="Fondo Mercato Logo"
@@ -28,7 +28,7 @@ export default function LoadingScreen() {
         unoptimized
       />
       <div className="w-64">
-         <Progress value={progress} className="h-2 bg-accent" indicatorClassName="bg-primary transition-all duration-[3000ms] linear" />
+         <Progress value={progress} className="h-2 bg-accent/20" />
       </div>
     </div>
   );
