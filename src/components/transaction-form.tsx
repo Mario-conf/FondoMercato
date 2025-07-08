@@ -46,12 +46,11 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
-import { CalendarIcon, Sparkles, Trash2 } from 'lucide-react';
+import { CalendarIcon, Trash2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
-import { getCategorySuggestion } from '@/lib/actions';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useToast } from '@/hooks/use-toast';
 import { useData } from '@/context/data-provider';
 
@@ -76,7 +75,6 @@ export default function TransactionForm({
   isOpen,
   onOpenChange,
 }: TransactionFormProps) {
-  const [isAiLoading, setIsAiLoading] = useState(false);
   const { toast } = useToast();
   const {
     expenseCategories,
@@ -133,46 +131,6 @@ export default function TransactionForm({
   };
 
   const transactionType = form.watch('type');
-
-  const handleSuggestCategory = async () => {
-    const description = form.getValues('description');
-    if (!description) {
-      toast({
-        variant: 'destructive',
-        title: 'Descripción necesaria',
-        description:
-          'Por favor, introduce una descripción para obtener una sugerencia de categoría.',
-      });
-      return;
-    }
-    setIsAiLoading(true);
-    try {
-      const result = await getCategorySuggestion(description);
-      if (result.error) {
-        throw new Error(result.error);
-      }
-      if (result.suggestedCategory) {
-        form.setValue('category', result.suggestedCategory);
-        toast({
-          title: 'Sugerencia de IA',
-          description: `Hemos categorizado esto como "${result.suggestedCategory}".`,
-        });
-      } else {
-        toast({
-          title: 'Sin Sugerencia',
-          description: `La IA no pudo determinar una categoría.`,
-        });
-      }
-    } catch (error) {
-      toast({
-        variant: 'destructive',
-        title: 'Error',
-        description: (error as Error).message,
-      });
-    } finally {
-      setIsAiLoading(false);
-    }
-  };
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     const finalValues = {
@@ -332,26 +290,7 @@ export default function TransactionForm({
                 name="category"
                 render={({ field }) => (
                   <FormItem>
-                    <div className="flex justify-between items-center">
-                      <FormLabel>Categoría</FormLabel>
-                      {transactionType === 'expense' && (
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          type="button"
-                          onClick={handleSuggestCategory}
-                          disabled={isAiLoading}
-                        >
-                          <Sparkles
-                            className={cn(
-                              'mr-2 h-4 w-4',
-                              isAiLoading && 'animate-spin'
-                            )}
-                          />
-                          Sugerir
-                        </Button>
-                      )}
-                    </div>
+                    <FormLabel>Categoría</FormLabel>
                     <Select onValueChange={field.onChange} value={field.value}>
                       <FormControl>
                         <SelectTrigger>
