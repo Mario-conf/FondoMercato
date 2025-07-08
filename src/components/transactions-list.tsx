@@ -1,3 +1,5 @@
+'use client';
+
 import { useMemo } from 'react';
 import { format, isToday, isYesterday } from 'date-fns';
 import type { Transaction } from '@/lib/types';

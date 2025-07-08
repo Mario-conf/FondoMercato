@@ -1,3 +1,5 @@
+'use client';
+
 import { useMemo } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import type { Transaction, ExpenseCategory } from '@/lib/types';
