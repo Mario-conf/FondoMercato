@@ -91,15 +91,15 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
   }, [incomeCategories]);
 
   const updateIncomeCategory = useCallback((oldName: string, newName: string) => {
-    const updatedCategories = incomeCategories.map(c => c === oldName ? newName : c);
+    const updatedCategories = incomeCategories.map(c => (c === oldName ? newName : c));
     setIncomeCategories(updatedCategories);
     storage.saveIncomeCategories(updatedCategories);
 
     const updatedTransactions = transactions.map(t => {
-        if (t.description === oldName && t.type === 'income') {
-            return { ...t, description: newName };
-        }
-        return t;
+      if (t.type === 'income' && t.category === oldName) {
+        return { ...t, category: newName };
+      }
+      return t;
     });
     setTransactions(updatedTransactions);
     storage.saveTransactions(updatedTransactions);
@@ -111,10 +111,10 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
     storage.saveIncomeCategories(updatedCategories);
 
     const updatedTransactions = transactions.map(t => {
-        if (t.description === name && t.type === 'income') {
-            return { ...t, description: "Otros Ingresos" };
-        }
-        return t;
+      if (t.type === 'income' && t.category === name) {
+        return { ...t, category: 'Otros Ingresos' };
+      }
+      return t;
     });
     setTransactions(updatedTransactions);
     storage.saveTransactions(updatedTransactions);
