@@ -49,7 +49,7 @@ export default function TransactionsTable({ transactions }: TransactionsTablePro
                   </TableCell>
                   <TableCell className="font-medium">{t.description}</TableCell>
                   <TableCell className="text-muted-foreground">{t.date.toLocaleDateString()}</TableCell>
-                  <TableCell className={cn('text-right font-mono', t.type === 'income' ? 'text-emerald-500' : 'text-red-500')}>
+                  <TableCell className={cn('text-right font-mono', t.type === 'income' ? 'text-chart-1' : 'text-chart-2')}>
                     {t.type === 'income' ? '+' : '-'}
                     {formatCurrency(t.amount)}
                   </TableCell>

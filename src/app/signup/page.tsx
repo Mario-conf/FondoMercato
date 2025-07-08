@@ -31,8 +31,8 @@ export default function SignupPage() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-secondary p-4">
-      <Card className="w-full max-w-sm">
+    <div className="flex min-h-screen items-center justify-center bg-background p-4">
+      <Card className="w-full max-w-sm bg-card">
         <CardHeader className="text-center">
           <CardTitle className="text-3xl font-bold font-headline">Fondo Mercato</CardTitle>
           <CardDescription>Crea tu cuenta para empezar</CardDescription>

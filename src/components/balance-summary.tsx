@@ -43,10 +43,10 @@ export default function BalanceSummary({ transactions }: BalanceSummaryProps) {
           {formatCurrency(total)}
         </p>
         <div className="flex gap-4 mt-2">
-          <div className="text-emerald-500 font-semibold">
+          <div className="text-chart-1 font-semibold">
             {formatCurrency(income)}
           </div>
-          <div className="text-red-500 font-semibold">
+          <div className="text-chart-2 font-semibold">
             {formatCurrency(expenses)}
           </div>
         </div>

@@ -19,16 +19,21 @@ const ONBOARDING_KEY = 'fondo_mercato_onboarding_complete';
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
-  const [onboardingComplete, setOnboardingComplete] = useState<boolean>(true);
+  const [onboardingComplete, setOnboardingComplete] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
   const pathname = usePathname();
 
   useEffect(() => {
-    const authStatus = window.localStorage.getItem(AUTH_KEY) === 'true';
-    const onboardingStatus = window.localStorage.getItem(ONBOARDING_KEY) === 'true';
-    setIsAuthenticated(authStatus);
-    setOnboardingComplete(onboardingStatus);
+    // This effect runs only on the client
+    try {
+      const authStatus = window.localStorage.getItem(AUTH_KEY) === 'true';
+      const onboardingStatus = window.localStorage.getItem(ONBOARDING_KEY) === 'true';
+      setIsAuthenticated(authStatus);
+      setOnboardingComplete(onboardingStatus);
+    } catch (error) {
+        console.error("Could not access localStorage", error);
+    }
     setIsLoading(false);
   }, []);
 
@@ -37,7 +42,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
     const publicRoutes = ['/login', '/signup'];
     const isOnboardingRoute = pathname === '/onboarding';
-    const isAppRoot = pathname === '/';
 
     if (!isAuthenticated && !publicRoutes.includes(pathname) && !isOnboardingRoute) {
       router.push('/login');
@@ -84,7 +88,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   if (isLoading) {
     return (
-        <div className="flex h-screen w-full items-center justify-center">
+        <div className="flex h-screen w-full items-center justify-center bg-background">
             <div className="flex flex-col items-center gap-4">
                 <Skeleton className="h-12 w-12 rounded-full" />
                 <div className="space-y-2">
