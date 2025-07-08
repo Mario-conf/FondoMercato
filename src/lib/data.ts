@@ -1,0 +1,60 @@
+import type { Transaction } from '@/lib/types';
+
+export const transactions: Transaction[] = [
+  {
+    id: '1',
+    date: new Date(),
+    description: 'Monthly Salary',
+    amount: 5000,
+    type: 'income',
+    category: 'Income',
+  },
+  {
+    id: '2',
+    date: new Date(new Date().setDate(new Date().getDate() - 1)),
+    description: 'Groceries from SuperMart',
+    amount: 150.75,
+    type: 'expense',
+    category: 'Groceries',
+  },
+  {
+    id: '3',
+    date: new Date(new Date().setDate(new Date().getDate() - 1)),
+    description: 'Dinner with friends',
+    amount: 85.5,
+    type: 'expense',
+    category: 'Leisure',
+  },
+  {
+    id: '4',
+    date: new Date(new Date().setDate(new Date().getDate() - 2)),
+    description: 'New T-shirt',
+    amount: 45.0,
+    type: 'expense',
+    category: 'Fashion',
+  },
+  {
+    id: '5',
+    date: new Date(new Date().setDate(new Date().getDate() - 2)),
+    description: 'Electricity Bill',
+    amount: 75.0,
+    type: 'expense',
+    category: 'Utilities',
+  },
+  {
+    id: '6',
+    date: new Date(new Date().setDate(new Date().getDate() - 3)),
+    description: 'Gym Membership',
+    amount: 50.0,
+    type: 'expense',
+    category: 'Sport',
+  },
+  {
+    id: '7',
+    date: new Date(),
+    description: 'Gasoline',
+    amount: 60.0,
+    type: 'expense',
+    category: 'Transport',
+  },
+];

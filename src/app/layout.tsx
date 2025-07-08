@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import './globals.css';
 import { Toaster } from '@/components/ui/toaster';
+import BottomNav from '@/components/bottom-nav';
 
 export const metadata: Metadata = {
   title: 'FinTrack',
@@ -27,7 +28,8 @@ export default function RootLayout({
         />
       </head>
       <body className="font-body antialiased">
-        {children}
+        <div className="pb-16 md:pb-0">{children}</div>
+        <BottomNav />
         <Toaster />
       </body>
     </html>
