@@ -3,8 +3,6 @@
 import BalanceSummary from '@/components/balance-summary';
 import TransactionsList from '@/components/transactions-list';
 import { useData } from '@/context/data-provider';
-import { Settings } from 'lucide-react';
-import Link from 'next/link';
 
 export default function DashboardPage() {
   const { transactions } = useData();
@@ -16,11 +14,7 @@ export default function DashboardPage() {
         <h1 className="text-lg font-bold leading-tight tracking-[-0.015em] flex-1 text-center">
           Inicio
         </h1>
-        <div className="flex w-12 items-center justify-end">
-            <Link href="/settings" className="p-2">
-                <Settings className="h-6 w-6" />
-            </Link>
-        </div>
+        <div className="w-12"></div>
       </header>
       <main className="px-4 py-4">
         <BalanceSummary transactions={transactions} />
