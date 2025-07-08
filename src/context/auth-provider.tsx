@@ -26,10 +26,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const pathname = usePathname();
 
   useEffect(() => {
-    // Minimum 3-second splash screen
+    // Minimum 5-second splash screen
     const timer = setTimeout(() => {
       setIsMinLoadingTimePassed(true);
-    }, 3000);
+    }, 5000);
 
     // This effect runs only on the client
     try {

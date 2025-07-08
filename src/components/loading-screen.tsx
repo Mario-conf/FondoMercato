@@ -28,7 +28,7 @@ export default function LoadingScreen() {
         unoptimized
       />
       <div className="w-64">
-         <Progress value={progress} className="h-2 bg-gray-200" indicatorClassName="bg-primary transition-all duration-[3000ms] ease-out" />
+         <Progress value={progress} className="h-2 bg-gray-200" indicatorClassName="bg-primary transition-all duration-[5000ms] ease-out" />
       </div>
     </div>
   );
