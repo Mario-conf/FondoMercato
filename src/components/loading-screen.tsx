@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { Progress } from '@/components/ui/progress';
+import { appImages } from '@/lib/images';
 
 export default function LoadingScreen() {
   const [progress, setProgress] = useState(0);
@@ -20,11 +21,11 @@ export default function LoadingScreen() {
   return (
     <div className="flex h-screen w-full flex-col items-center justify-center bg-white space-y-8">
       <Image
-        src="https://placehold.co/150x150.png"
-        alt="Fondo Mercato Logo"
+        src={appImages.loadingLogo.src}
+        alt={appImages.loadingLogo.alt}
         width={150}
         height={150}
-        data-ai-hint="monochrome logo"
+        data-ai-hint={appImages.loadingLogo.hint}
         unoptimized
       />
       <div className="w-64">
