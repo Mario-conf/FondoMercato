@@ -17,7 +17,7 @@ export default function StatsPage() {
                 <ArrowLeft className="h-6 w-6" />
             </button>
             <h1 className="text-lg font-bold leading-tight tracking-[-0.015em] flex-1 text-center pr-12">
-                Transacciones
+                Estadísticas
             </h1>
         </header>
       <main className="px-4 py-2">

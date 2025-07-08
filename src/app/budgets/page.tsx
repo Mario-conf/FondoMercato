@@ -3,11 +3,18 @@
 import Budgets from '@/components/budgets';
 import OverallBudget from '@/components/overall-budget';
 import { Button } from '@/components/ui/button';
+import { useData } from '@/context/data-provider';
 import { ArrowLeft } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
 export default function BudgetsPage() {
   const router = useRouter();
+  const { setBudgetFormOpen, setEditingBudget } = useData();
+
+  const handleCreateBudget = () => {
+    setEditingBudget(null);
+    setBudgetFormOpen(true);
+  };
 
   return (
     <div className="min-h-screen bg-background text-foreground">
@@ -35,7 +42,10 @@ export default function BudgetsPage() {
           </h2>
           <Budgets />
         </div>
-        <Button className="w-full h-12 text-base font-semibold">
+        <Button
+          onClick={handleCreateBudget}
+          className="w-full h-12 text-base font-semibold"
+        >
           Crear Presupuesto
         </Button>
       </main>

@@ -3,10 +3,29 @@
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { useAuth } from '@/context/auth-provider';
-import { LogOut, User, Bell, Shield } from 'lucide-react';
+import { LogOut, User, Bell, Shield, ChevronRight } from 'lucide-react';
+import Link from 'next/link';
 
 export default function SettingsPage() {
   const { logout } = useAuth();
+
+  const settingsItems = [
+    {
+      href: '/settings/profile',
+      icon: User,
+      label: 'Editar Perfil',
+    },
+    {
+      href: '/settings/security',
+      icon: Shield,
+      label: 'Seguridad',
+    },
+    {
+      href: '/settings/notifications',
+      icon: Bell,
+      label: 'Notificaciones',
+    },
+  ];
 
   return (
     <div className="min-h-screen bg-background text-foreground">
@@ -16,42 +35,29 @@ export default function SettingsPage() {
         </h1>
       </header>
       <main className="mx-auto w-full max-w-lg px-4 py-8 space-y-6">
-        <div className="bg-secondary rounded-xl p-4 space-y-2">
-          <div className="flex items-center justify-between p-2">
-            <div className="flex items-center gap-4">
-              <User className="h-5 w-5 text-muted-foreground" />
-              <span className="font-medium">Editar Perfil</span>
-            </div>
-            <Button variant="ghost" size="sm" disabled>
-              Próximamente
-            </Button>
-          </div>
-          <Separator className="bg-border/50" />
-          <div className="flex items-center justify-between p-2">
-            <div className="flex items-center gap-4">
-              <Shield className="h-5 w-5 text-muted-foreground" />
-              <span className="font-medium">Seguridad</span>
-            </div>
-            <Button variant="ghost" size="sm" disabled>
-              Próximamente
-            </Button>
-          </div>
-          <Separator className="bg-border/50" />
-          <div className="flex items-center justify-between p-2">
-            <div className="flex items-center gap-4">
-              <Bell className="h-5 w-5 text-muted-foreground" />
-              <span className="font-medium">Notificaciones</span>
-            </div>
-            <Button variant="ghost" size="sm" disabled>
-              Próximamente
-            </Button>
-          </div>
+        <div className="bg-secondary rounded-xl p-2 space-y-1">
+          {settingsItems.map((item, index) => (
+            <React.Fragment key={item.href}>
+              <Link href={item.href} passHref>
+                <button className="flex items-center justify-between p-3 w-full text-left rounded-lg hover:bg-accent transition-colors">
+                  <div className="flex items-center gap-4">
+                    <item.icon className="h-5 w-5 text-muted-foreground" />
+                    <span className="font-medium">{item.label}</span>
+                  </div>
+                  <ChevronRight className="h-5 w-5 text-muted-foreground" />
+                </button>
+              </Link>
+              {index < settingsItems.length - 1 && (
+                <Separator className="bg-border/50 mx-3 w-auto" />
+              )}
+            </React.Fragment>
+          ))}
         </div>
 
         <div className="bg-secondary rounded-xl p-2">
           <Button
             variant="ghost"
-            className="w-full justify-start text-destructive hover:text-destructive hover:bg-destructive/10"
+            className="w-full justify-start text-destructive hover:text-destructive hover:bg-destructive/10 p-3"
             onClick={logout}
           >
             <LogOut className="mr-3 h-5 w-5" />

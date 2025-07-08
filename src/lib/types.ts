@@ -9,6 +9,13 @@ export type Transaction = {
 
 export type ExpenseCategory = string;
 
+export type Budget = {
+  id: string;
+  category: ExpenseCategory;
+  amount: number;
+  month: string; // YYYY-MM format
+};
+
 export const expenseCategories: ExpenseCategory[] = [
   'Ocio',
   'Hogar',
