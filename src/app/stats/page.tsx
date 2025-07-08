@@ -1,8 +1,12 @@
+'use client';
+
 import ExpensesByCategory from '@/components/expenses-by-category';
 import OverviewChart from '@/components/overview-chart';
-import { transactions } from '@/lib/data';
+import { useData } from '@/context/data-provider';
 
 export default function StatsPage() {
+  const { transactions } = useData();
+
   return (
     <div className="min-h-screen bg-background text-foreground">
       <main className="mx-auto max-w-lg px-4 py-8">

@@ -2,6 +2,8 @@ import type { Metadata } from 'next';
 import './globals.css';
 import { Toaster } from '@/components/ui/toaster';
 import BottomNav from '@/components/bottom-nav';
+import { DataProvider } from '@/context/data-provider';
+import AddTransactionButton from '@/components/add-transaction-button';
 
 export const metadata: Metadata = {
   title: 'FinTrack',
@@ -28,9 +30,12 @@ export default function RootLayout({
         />
       </head>
       <body className="font-body antialiased">
-        <div className="pb-16">{children}</div>
-        <BottomNav />
-        <Toaster />
+        <DataProvider>
+          <div className="pb-16">{children}</div>
+          <BottomNav />
+          <AddTransactionButton />
+          <Toaster />
+        </DataProvider>
       </body>
     </html>
   );

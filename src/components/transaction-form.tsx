@@ -104,8 +104,12 @@ export default function TransactionForm({ isOpen, onOpenChange, onAddTransaction
   };
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    const category = values.type === 'income' ? 'Income' : values.category;
-    onAddTransaction({ ...values, category });
+    const finalValues = {
+        ...values,
+        category: values.type === 'income' ? 'Income' : values.category,
+        amount: Number(values.amount) // Ensure amount is a number
+    }
+    onAddTransaction(finalValues);
     form.reset();
     onOpenChange(false);
   }
@@ -119,7 +123,7 @@ export default function TransactionForm({ isOpen, onOpenChange, onAddTransaction
         </SheetHeader>
         <div className="flex-1 overflow-y-auto">
             <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 p-1">
+            <form id="transaction-form" onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 p-1">
                 <FormField
                 control={form.control}
                 name="type"

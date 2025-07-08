@@ -1,8 +1,12 @@
+'use client';
+
 import BalanceSummary from '@/components/balance-summary';
 import TransactionsList from '@/components/transactions-list';
-import { transactions } from '@/lib/data';
+import { useData } from '@/context/data-provider';
 
 export default function DashboardPage() {
+  const { transactions } = useData();
+
   return (
     <div className="min-h-screen bg-background text-foreground">
       <main className="mx-auto max-w-lg px-4 py-8">
