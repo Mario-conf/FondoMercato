@@ -1,4 +1,4 @@
-# **App Name**: FinTrack
+# **App Name**: Fondo Mercato
 
 ## Core Features:
 

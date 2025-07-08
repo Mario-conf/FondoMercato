@@ -2,11 +2,11 @@
 import { expenseCategories as defaultExpenseCategories, incomeCategories as defaultIncomeCategories } from './types';
 import type { Transaction, Budget } from './types';
 
-const TRANSACTIONS_KEY = 'fintrack_transactions';
-const EXPENSE_CATEGORIES_KEY = 'fintrack_expense_categories';
-const INCOME_CATEGORIES_KEY = 'fintrack_income_categories';
-const BUDGETS_KEY = 'fintrack_budgets';
-const OVERALL_BUDGET_KEY = 'fintrack_overall_budget';
+const TRANSACTIONS_KEY = 'Fondo Mercato_transactions';
+const EXPENSE_CATEGORIES_KEY = 'Fondo Mercato_expense_categories';
+const INCOME_CATEGORIES_KEY = 'Fondo Mercato_income_categories';
+const BUDGETS_KEY = 'Fondo Mercato_budgets';
+const OVERALL_BUDGET_KEY = 'Fondo Mercato_overall_budget';
 
 
 // This function acts as a separation layer. In the future, this could

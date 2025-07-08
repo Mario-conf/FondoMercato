@@ -23,10 +23,10 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-const AUTH_KEY = 'fintrack_auth';
-const ONBOARDING_KEY = 'fintrack_onboarding_complete';
-const USERS_KEY = 'fintrack_users';
-const CURRENT_USER_EMAIL_KEY = 'fintrack_current_user_email';
+const AUTH_KEY = 'Fondo Mercato_auth';
+const ONBOARDING_KEY = 'Fondo Mercato_onboarding_complete';
+const USERS_KEY = 'Fondo Mercato_users';
+const CURRENT_USER_EMAIL_KEY = 'Fondo Mercato_current_user_email';
 
 const getRegisteredUsers = (): User[] => {
   if (typeof window !== 'undefined') {

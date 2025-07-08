@@ -1,7 +1,7 @@
 {
-  "name": "FinTrack",
-  "short_name": "FinTrack",
-  "description": "Take control of your finances with FinTrack. Track income, manage expenses, create budgets, and achieve your financial goals with ease.",
+  "name": "Fondo Mercato",
+  "short_name": "Fondo Mercato",
+  "description": "Take control of your finances with Fondo Mercato. Track income, manage expenses, create budgets, and achieve your financial goals with ease.",
   "icons": [
     {
       "src": "/icons/icon-192x192.svg",
