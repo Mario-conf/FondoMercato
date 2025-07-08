@@ -2,6 +2,7 @@
 
 import React, { useMemo } from 'react';
 import type { Transaction } from '@/lib/types';
+import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 
 interface OverviewChartProps {
@@ -26,7 +27,7 @@ export default function OverviewChart({ transactions }: OverviewChartProps) {
     for (let i = 0; i < 6; i++) {
       const date = new Date(sixMonthsAgo);
       date.setMonth(date.getMonth() + i);
-      const monthKey = format(date, 'MMM');
+      const monthKey = format(date, 'MMM', { locale: es });
       monthlyData[monthKey] = { income: 0, expense: 0 };
     }
     
@@ -34,8 +35,9 @@ export default function OverviewChart({ transactions }: OverviewChartProps) {
     let totalExpenses = 0;
 
     transactions.forEach(t => {
-      if (t.date >= sixMonthsAgo) {
-        const monthKey = format(t.date, 'MMM');
+      // Ensure t.date is a valid Date object before processing
+      if (t.date && t.date >= sixMonthsAgo) {
+        const monthKey = format(t.date, 'MMM', { locale: es });
         if (monthlyData[monthKey]) {
           if (t.type === 'income') {
             monthlyData[monthKey].income += t.amount;
@@ -48,8 +50,7 @@ export default function OverviewChart({ transactions }: OverviewChartProps) {
       else totalExpenses += t.amount;
     });
 
-    const values = Object.values(monthlyData).map(d => d.income - d.expense);
-    const maxVal = Math.max(...values, 1);
+    const maxVal = Math.max(...Object.values(monthlyData).map(d => d.income), 1);
 
     const chartData = Object.entries(monthlyData).map(([name, data]) => ({
       name,
@@ -59,10 +60,6 @@ export default function OverviewChart({ transactions }: OverviewChartProps) {
     return { chartData, totalNet: totalIncome - totalExpenses };
   }, [transactions]);
 
-  // Helper to format date because date-fns is not available on server components by default
-  const format = (date: Date, fmt: string) => {
-    return date.toLocaleString('es-ES', { month: 'short' });
-  }
 
   return (
     <div className="flex flex-wrap gap-4 py-6">
