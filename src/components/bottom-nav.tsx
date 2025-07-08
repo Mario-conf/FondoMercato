@@ -21,7 +21,7 @@ export default function BottomNav() {
   const pathname = usePathname();
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-50 border-t bg-background/95 backdrop-blur-sm md:hidden">
+    <nav className="fixed bottom-0 left-0 right-0 z-50 border-t bg-background/95 backdrop-blur-sm">
       <div className="mx-auto grid h-16 max-w-lg grid-cols-4 items-center">
         {navItems.map(({ href, label, icon: Icon }) => {
           const isActive = pathname === href;
