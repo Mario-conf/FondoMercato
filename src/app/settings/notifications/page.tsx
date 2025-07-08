@@ -9,7 +9,7 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { useData } from '@/context/data-provider';
 import { subMonths, getYear, getMonth } from 'date-fns';
 
-const NOTIFICATIONS_ENABLED_KEY = 'fondo_mercato_notifications_enabled';
+const NOTIFICATIONS_ENABLED_KEY = 'fintrack_notifications_enabled';
 
 export default function NotificationsSettingsPage() {
   const router = useRouter();
