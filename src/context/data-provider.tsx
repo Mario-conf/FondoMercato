@@ -7,8 +7,12 @@ import * as storage from '@/lib/storage';
 interface DataContextType {
   transactions: Transaction[];
   addTransaction: (transaction: Omit<Transaction, 'id'>) => void;
+  updateTransaction: (id: string, transaction: Omit<Transaction, 'id'>) => void;
+  deleteTransaction: (id: string) => void;
   isTransactionFormOpen: boolean;
   setTransactionFormOpen: (isOpen: boolean) => void;
+  editingTransaction: Transaction | null;
+  setEditingTransaction: (transaction: Transaction | null) => void;
   expenseCategories: string[];
   incomeCategories: string[];
   addExpenseCategory: (name: string) => void;
@@ -24,6 +28,7 @@ const DataContext = createContext<DataContextType | undefined>(undefined);
 export const DataProvider = ({ children }: { children: ReactNode }) => {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [isTransactionFormOpen, setTransactionFormOpen] = useState(false);
+  const [editingTransaction, setEditingTransaction] = useState<Transaction | null>(null);
   const [expenseCategories, setExpenseCategories] = useState<string[]>([]);
   const [incomeCategories, setIncomeCategories] = useState<string[]>([]);
 
@@ -42,6 +47,26 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
     const newTransaction = { ...transactionWithDateObject, id: new Date().toISOString() + Math.random() };
     const updatedTransactions = [...transactions, newTransaction];
     
+    setTransactions(updatedTransactions);
+    storage.saveTransactions(updatedTransactions);
+  }, [transactions]);
+  
+  const updateTransaction = useCallback((id: string, transactionData: Omit<Transaction, 'id'>) => {
+    const transactionWithDateObject = {
+      ...transactionData,
+      date: new Date(transactionData.date),
+    };
+    
+    const updatedTransactions = transactions.map(t => 
+      t.id === id ? { id, ...transactionWithDateObject } : t
+    );
+    
+    setTransactions(updatedTransactions);
+    storage.saveTransactions(updatedTransactions);
+  }, [transactions]);
+  
+  const deleteTransaction = useCallback((id: string) => {
+    const updatedTransactions = transactions.filter(t => t.id !== id);
     setTransactions(updatedTransactions);
     storage.saveTransactions(updatedTransactions);
   }, [transactions]);
@@ -123,8 +148,12 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
   const value = {
     transactions,
     addTransaction,
+    updateTransaction,
+    deleteTransaction,
     isTransactionFormOpen,
     setTransactionFormOpen,
+    editingTransaction,
+    setEditingTransaction,
     expenseCategories,
     incomeCategories,
     addExpenseCategory,

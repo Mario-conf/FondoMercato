@@ -8,7 +8,7 @@ import { useData } from '@/context/data-provider';
 
 export default function AppShell({ children }: { children: React.ReactNode }) {
     const pathname = usePathname();
-    const { isTransactionFormOpen, setTransactionFormOpen, addTransaction } = useData();
+    const { isTransactionFormOpen, setTransactionFormOpen } = useData();
 
     const showNav = !['/login', '/signup', '/onboarding'].includes(pathname);
 
@@ -22,7 +22,6 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
                     <TransactionForm
                         isOpen={isTransactionFormOpen}
                         onOpenChange={setTransactionFormOpen}
-                        onAddTransaction={addTransaction}
                     />
                 </>
             )}

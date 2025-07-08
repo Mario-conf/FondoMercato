@@ -20,7 +20,7 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
+import { Button, buttonVariants } from '@/components/ui/button';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import {
   Popover,
@@ -35,20 +35,29 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { CalendarIcon, Sparkles } from 'lucide-react';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@/components/ui/alert-dialog';
+import { CalendarIcon, Sparkles, Trash2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
-import { type Transaction } from '@/lib/types';
 import { getCategorySuggestion } from '@/lib/actions';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useToast } from '@/hooks/use-toast';
 import { useData } from '@/context/data-provider';
 
 interface TransactionFormProps {
   isOpen: boolean;
   onOpenChange: (isOpen: boolean) => void;
-  onAddTransaction: (transaction: Omit<Transaction, 'id'>) => void;
 }
 
 const formSchema = z.object({
@@ -66,11 +75,20 @@ const formSchema = z.object({
 export default function TransactionForm({
   isOpen,
   onOpenChange,
-  onAddTransaction,
 }: TransactionFormProps) {
   const [isAiLoading, setIsAiLoading] = useState(false);
   const { toast } = useToast();
-  const { expenseCategories, incomeCategories } = useData();
+  const {
+    expenseCategories,
+    incomeCategories,
+    addTransaction,
+    updateTransaction,
+    deleteTransaction,
+    editingTransaction,
+    setEditingTransaction,
+  } = useData();
+
+  const isEditMode = !!editingTransaction;
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -82,6 +100,30 @@ export default function TransactionForm({
       category: '',
     },
   });
+
+  useEffect(() => {
+    if (editingTransaction) {
+      form.reset({
+        ...editingTransaction,
+        date: new Date(editingTransaction.date),
+      });
+    } else {
+      form.reset({
+        type: 'expense',
+        amount: 0,
+        description: '',
+        date: new Date(),
+        category: '',
+      });
+    }
+  }, [editingTransaction, form]);
+
+  const handleOpenChange = (open: boolean) => {
+    onOpenChange(open);
+    if (!open) {
+      setEditingTransaction(null);
+    }
+  };
 
   const transactionType = form.watch('type');
 
@@ -128,26 +170,60 @@ export default function TransactionForm({
   function onSubmit(values: z.infer<typeof formSchema>) {
     const finalValues = {
       ...values,
-      amount: Number(values.amount), // Ensure amount is a number
+      amount: Number(values.amount),
     };
-    onAddTransaction(finalValues);
-    form.reset({
-      type: 'expense',
-      amount: 0,
-      description: '',
-      date: new Date(),
-      category: '',
-    });
-    onOpenChange(false);
+    if (isEditMode && editingTransaction) {
+      updateTransaction(editingTransaction.id, finalValues);
+    } else {
+      addTransaction(finalValues);
+    }
+    handleOpenChange(false);
   }
 
+  const handleDelete = () => {
+    if (editingTransaction) {
+      deleteTransaction(editingTransaction.id);
+      handleOpenChange(false);
+    }
+  };
+
   return (
-    <Sheet open={isOpen} onOpenChange={onOpenChange}>
+    <Sheet open={isOpen} onOpenChange={handleOpenChange}>
       <SheetContent className="flex flex-col">
         <SheetHeader>
-          <SheetTitle className="font-headline">Nueva Transacción</SheetTitle>
+          <div className="flex justify-between items-center">
+            <SheetTitle className="font-headline">
+              {isEditMode ? 'Editar Transacción' : 'Nueva Transacción'}
+            </SheetTitle>
+            {isEditMode && (
+              <AlertDialog>
+                <AlertDialogTrigger asChild>
+                  <Button variant="ghost" size="icon" className="text-destructive hover:text-destructive hover:bg-destructive/10 rounded-full">
+                    <Trash2 className="h-5 w-5" />
+                  </Button>
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>¿Estás seguro?</AlertDialogTitle>
+                    <AlertDialogDescription>
+                      Esta acción es irreversible y eliminará la transacción permanentemente.
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                    <AlertDialogAction
+                      className={cn(buttonVariants({ variant: 'destructive' }))}
+                      onClick={handleDelete}
+                    >
+                      Eliminar
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
+            )}
+          </div>
           <SheetDescription>
-            Añade un nuevo ingreso o gasto a tu registro.
+            {isEditMode ? 'Modifica los detalles de la transacción.' : 'Añade un nuevo ingreso o gasto a tu registro.'}
           </SheetDescription>
         </SheetHeader>
         <div className="flex-1 overflow-y-auto">
@@ -324,7 +400,7 @@ export default function TransactionForm({
             form="transaction-form"
             className="w-full bg-primary hover:bg-primary/90"
           >
-            Añadir Transacción
+            {isEditMode ? 'Actualizar Transacción' : 'Añadir Transacción'}
           </Button>
         </SheetFooter>
       </SheetContent>
