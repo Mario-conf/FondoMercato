@@ -1,3 +1,4 @@
+
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -28,10 +29,12 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { CalendarIcon, Sparkles } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { format } from 'date-fns';
-import { type Transaction, expenseCategories } from '@/lib/types';
+import { es } from 'date-fns/locale';
+import { type Transaction } from '@/lib/types';
 import { getCategorySuggestion } from '@/lib/actions';
 import { useState } from 'react';
 import { useToast } from '@/hooks/use-toast';
+import { useData } from '@/context/data-provider';
 
 interface TransactionFormProps {
   isOpen: boolean;
@@ -50,6 +53,7 @@ const formSchema = z.object({
 export default function TransactionForm({ isOpen, onOpenChange, onAddTransaction }: TransactionFormProps) {
   const [isAiLoading, setIsAiLoading] = useState(false);
   const { toast } = useToast();
+  const { expenseCategories } = useData();
   
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -110,7 +114,13 @@ export default function TransactionForm({ isOpen, onOpenChange, onAddTransaction
         amount: Number(values.amount) // Ensure amount is a number
     }
     onAddTransaction(finalValues);
-    form.reset();
+    form.reset({
+      type: 'expense',
+      amount: 0,
+      description: '',
+      date: new Date(),
+      category: '',
+    });
     onOpenChange(false);
   }
 
@@ -218,39 +228,46 @@ export default function TransactionForm({ isOpen, onOpenChange, onAddTransaction
                 )}
                 
                 <FormField
-                control={form.control}
-                name="date"
-                render={({ field }) => (
+                  control={form.control}
+                  name="date"
+                  render={({ field }) => (
                     <FormItem className="flex flex-col">
-                    <FormLabel>Fecha</FormLabel>
-                    <Popover>
+                      <FormLabel>Fecha</FormLabel>
+                      <Popover>
                         <PopoverTrigger asChild>
-                        <FormControl>
+                          <FormControl>
                             <Button
-                            variant="outline"
-                            className={cn(
-                                'w-full pl-3 text-left font-normal',
+                              variant={'outline'}
+                              className={cn(
+                                'w-full justify-start text-left font-normal',
                                 !field.value && 'text-muted-foreground'
-                            )}
+                              )}
                             >
-                            {field.value ? format(field.value, 'PPP') : <span>Elige una fecha</span>}
-                            <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                              {field.value ? (
+                                format(field.value, 'PPP', { locale: es })
+                              ) : (
+                                <span>Elige una fecha</span>
+                              )}
+                              <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
                             </Button>
-                        </FormControl>
+                          </FormControl>
                         </PopoverTrigger>
                         <PopoverContent className="w-auto p-0" align="start">
-                        <Calendar
+                          <Calendar
+                            locale={es}
                             mode="single"
                             selected={field.value}
                             onSelect={field.onChange}
-                            disabled={(date) => date > new Date() || date < new Date('1900-01-01')}
+                            disabled={(date) =>
+                              date > new Date() || date < new Date('1900-01-01')
+                            }
                             initialFocus
-                        />
+                          />
                         </PopoverContent>
-                    </Popover>
-                    <FormMessage />
+                      </Popover>
+                      <FormMessage />
                     </FormItem>
-                )}
+                  )}
                 />
                 
             </form>

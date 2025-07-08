@@ -1,3 +1,4 @@
+
 export type Transaction = {
   id: string;
   date: Date;
@@ -7,19 +8,7 @@ export type Transaction = {
   category: ExpenseCategory | 'Ingresos';
 };
 
-export type ExpenseCategory =
-  | 'Ocio'
-  | 'Hogar'
-  | 'Salud'
-  | 'Moda'
-  | 'Servicios'
-  | 'Comida'
-  | 'Deporte'
-  | 'Transporte'
-  | 'Inversiones'
-  | 'Viajes'
-  | 'Regalos'
-  | 'Otros';
+export type ExpenseCategory = string;
 
 export const expenseCategories: ExpenseCategory[] = [
   'Ocio',
@@ -35,3 +24,5 @@ export const expenseCategories: ExpenseCategory[] = [
   'Regalos',
   'Otros',
 ];
+
+export const incomeCategories: string[] = ['Salario', 'Regalos', 'Inversiones', 'Otros Ingresos'];

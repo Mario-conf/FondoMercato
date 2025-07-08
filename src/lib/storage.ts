@@ -1,6 +1,10 @@
+
+import { expenseCategories as defaultExpenseCategories, incomeCategories as defaultIncomeCategories } from './types';
 import type { Transaction } from './types';
 
 const TRANSACTIONS_KEY = 'fintrack_transactions';
+const EXPENSE_CATEGORIES_KEY = 'fintrack_expense_categories';
+const INCOME_CATEGORIES_KEY = 'fintrack_income_categories';
 
 // This function acts as a separation layer. In the future, this could
 // be replaced with an API call to a MySQL database.
@@ -42,4 +46,47 @@ export const getTransactions = (): Transaction[] => {
     }
   }
   return [];
+};
+
+
+// Functions for Expense Categories
+export const saveExpenseCategories = (categories: string[]): void => {
+    if (typeof window !== 'undefined') {
+        window.localStorage.setItem(EXPENSE_CATEGORIES_KEY, JSON.stringify(categories));
+    }
+};
+
+export const getExpenseCategories = (): string[] => {
+    if (typeof window !== 'undefined') {
+        const data = window.localStorage.getItem(EXPENSE_CATEGORIES_KEY);
+        if (data) {
+            return JSON.parse(data);
+        } else {
+            // Initialize with default if not present
+            saveExpenseCategories(defaultExpenseCategories);
+            return defaultExpenseCategories;
+        }
+    }
+    return defaultExpenseCategories;
+};
+
+// Functions for Income Categories
+export const saveIncomeCategories = (categories: string[]): void => {
+    if (typeof window !== 'undefined') {
+        window.localStorage.setItem(INCOME_CATEGORIES_KEY, JSON.stringify(categories));
+    }
+};
+
+export const getIncomeCategories = (): string[] => {
+    if (typeof window !== 'undefined') {
+        const data = window.localStorage.getItem(INCOME_CATEGORIES_KEY);
+        if (data) {
+            return JSON.parse(data);
+        } else {
+            // Initialize with default if not present
+            saveIncomeCategories(defaultIncomeCategories);
+            return defaultIncomeCategories;
+        }
+    }
+    return defaultIncomeCategories;
 };
