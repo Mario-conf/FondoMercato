@@ -285,7 +285,28 @@ export default function TransactionForm({
                   <FormItem>
                     <FormLabel>Cantidad</FormLabel>
                     <FormControl>
-                      <Input type="number" placeholder="0.00" {...field} />
+                      <Input
+                        type="text"
+                        inputMode="decimal"
+                        placeholder="0.00"
+                        {...field}
+                        onChange={(e) => {
+                          const value = e.target.value;
+                          const regex = /^\d*\.?\d{0,2}$/;
+
+                          if (value === '' || regex.test(value)) {
+                            if (
+                              value.length > 1 &&
+                              value.startsWith('0') &&
+                              !value.startsWith('0.')
+                            ) {
+                              field.onChange(value.substring(1));
+                            } else {
+                              field.onChange(value);
+                            }
+                          }
+                        }}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
