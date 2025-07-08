@@ -65,6 +65,10 @@ export default function SettingsPage() {
             Cerrar Sesión
           </Button>
         </div>
+        <div className="text-center text-xs text-muted-foreground pt-4">
+            <p>&copy; {new Date().getFullYear()} Albaydex. Todos los derechos reservados.</p>
+            <p>Hecho con ❤️ por el equipo de Albaydex.</p>
+        </div>
       </main>
     </div>
   );
