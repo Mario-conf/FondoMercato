@@ -46,7 +46,7 @@ export default function OnboardingPage() {
       <div>
         <div className="flex items-center p-4 pb-2 justify-center">
           <h2 className="text-lg font-bold leading-tight tracking-[-0.015em] text-foreground">
-            FinTrack
+            Fondo Mercato
           </h2>
         </div>
         <Carousel setApi={setApi} className="w-full" opts={{ loop: false }}>

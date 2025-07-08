@@ -3,9 +3,9 @@ export const appImages = {
     {
       src: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDprDLYrcL1BwOSb1HOy3TcWnN2A_RIG4QLyFPuW7ccFAbffyOOWPMwvni97mmFH3ahNSFworYSeR6bMx0IEQ1G7XKbVmhbJcoBR9PuS22moyAsdv299aKexq3AeQrmBFmabMA4E5eHicQjH1LuZYuIflQsgK9KbfAdTGdlzrkN92AOULaCXlu0mDk887YF3pe8o4RwL1ZY0wz5X65dnudlhWD1lfAtpb1GYFYkwLux7-RCsKoMtUDans94vNYzhPnM6z28oQigysFj',
       hint: 'finance illustration',
-      title: 'Bienvenido a FinTrack',
+      title: 'Bienvenido a Fondo Mercato',
       description:
-        'Tu viaje financiero comienza aquí. Exploremos cómo FinTrack puede ayudarte a administrar tu dinero sabiamente.',
+        'Tu viaje financiero comienza aquí. Exploremos cómo Fondo Mercato puede ayudarte a administrar tu dinero sabiamente.',
     },
     {
       src: 'https://kstatic.googleusercontent.com/files/15f4e8b345a33a0c64952467d287042c16f0927c49b06256cae45f7f9050d859a6d1b7d156828fda9b398a89a531e072f4f220f5d720516694e99f011059f139',
@@ -31,7 +31,7 @@ export const appImages = {
   ],
   loadingLogo: {
     src: 'https://placehold.co/150x150.png',
-    alt: 'FinTrack Logo',
+    alt: 'Fondo Mercato Logo',
     hint: 'monochrome logo',
   },
 };
