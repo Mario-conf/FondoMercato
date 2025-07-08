@@ -2,7 +2,7 @@
 
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
-import { Skeleton } from '@/components/ui/skeleton';
+import LoadingScreen from '@/components/loading-screen';
 
 interface AuthContextType {
   isAuthenticated: boolean;
@@ -20,11 +20,17 @@ const ONBOARDING_KEY = 'fondo_mercato_onboarding_complete';
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [onboardingComplete, setOnboardingComplete] = useState<boolean>(false);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isAuthCheckComplete, setIsAuthCheckComplete] = useState(false);
+  const [isMinLoadingTimePassed, setIsMinLoadingTimePassed] = useState(false);
   const router = useRouter();
   const pathname = usePathname();
 
   useEffect(() => {
+    // Minimum 3-second splash screen
+    const timer = setTimeout(() => {
+      setIsMinLoadingTimePassed(true);
+    }, 3000);
+
     // This effect runs only on the client
     try {
       const authStatus = window.localStorage.getItem(AUTH_KEY) === 'true';
@@ -34,11 +40,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     } catch (error) {
         console.error("Could not access localStorage", error);
     }
-    setIsLoading(false);
+    setIsAuthCheckComplete(true);
+    
+    return () => clearTimeout(timer);
   }, []);
 
   useEffect(() => {
-    if (isLoading) return;
+    if (!isAuthCheckComplete || !isMinLoadingTimePassed) return;
 
     const publicRoutes = ['/login', '/signup'];
     const isOnboardingRoute = pathname === '/onboarding';
@@ -50,7 +58,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     } else if (isAuthenticated && !onboardingComplete && !isOnboardingRoute) {
       router.push('/onboarding');
     }
-  }, [isAuthenticated, onboardingComplete, isLoading, pathname, router]);
+  }, [isAuthenticated, onboardingComplete, isAuthCheckComplete, isMinLoadingTimePassed, pathname, router]);
 
   const login = () => {
     window.localStorage.setItem(AUTH_KEY, 'true');
@@ -86,17 +94,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const value = { isAuthenticated, login, logout, signup, completeOnboarding };
 
+  const isLoading = !isAuthCheckComplete || !isMinLoadingTimePassed;
+
   if (isLoading) {
     return (
-        <div className="flex h-screen w-full items-center justify-center bg-background">
-            <div className="flex flex-col items-center gap-4">
-                <Skeleton className="h-12 w-12 rounded-full" />
-                <div className="space-y-2">
-                    <Skeleton className="h-4 w-[250px]" />
-                    <Skeleton className="h-4 w-[200px]" />
-                </div>
-            </div>
-        </div>
+        <LoadingScreen />
     );
   }
 
