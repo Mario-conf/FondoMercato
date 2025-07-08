@@ -7,8 +7,8 @@ import { cn } from '@/lib/utils';
 
 const navItems = [
   { href: '/', label: 'Inicio', icon: Home },
-  { href: '/stats', label: 'Transacciones', icon: CreditCard },
-  { href: '/budgets', label: 'Presupuesto', icon: CircleDollarSign },
+  { href: '/stats', label: 'Estad.', icon: CreditCard },
+  { href: '/budgets', label: 'Metas', icon: CircleDollarSign },
   { href: '/settings', label: 'Perfil', icon: User },
 ];
 
