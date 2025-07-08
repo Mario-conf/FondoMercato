@@ -124,6 +124,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     window.localStorage.removeItem(ONBOARDING_KEY);
     setIsAuthenticated(true);
     setOnboardingComplete(false);
+    setIsSplashScreenVisible(false);
     router.push('/onboarding');
   };
 
