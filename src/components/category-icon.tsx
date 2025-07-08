@@ -10,7 +10,7 @@ const iconMap: Record<ExpenseCategory | 'Income', React.ElementType> = {
   Transport: Car,
   Housing: Home,
   Entertainment: Ticket,
-  Health: HeartPulse,
+  Healthcare: HeartPulse,
   Other: MoreHorizontal,
   Income: TrendingUp,
 };

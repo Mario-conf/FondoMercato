@@ -2,7 +2,7 @@
 
 import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis, Tooltip, Legend } from 'recharts';
 import type { Transaction } from '@/lib/types';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { useMemo } from 'react';
 
 interface OverviewChartProps {
@@ -43,7 +43,6 @@ export default function OverviewChart({ transactions }: OverviewChartProps) {
   return (
     <Card className="h-full">
       <CardHeader>
-        <CardTitle className="font-headline">Financial Overview</CardTitle>
       </CardHeader>
       <CardContent className="h-[280px]">
         {data.length > 0 ? (

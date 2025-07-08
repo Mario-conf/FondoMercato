@@ -6,7 +6,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import type { Transaction } from '@/lib/types';
 import CategoryIcon from './category-icon';
 import { cn } from '@/lib/utils';
@@ -26,7 +26,6 @@ export default function TransactionsTable({ transactions }: TransactionsTablePro
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="font-headline">Recent Transactions</CardTitle>
       </CardHeader>
       <CardContent>
         <Table>
