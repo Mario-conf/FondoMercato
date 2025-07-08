@@ -18,14 +18,14 @@ export default function OverallBudget() {
           <div className="flex justify-between items-center mb-2">
             <div className="flex items-center gap-2">
               <span className="font-semibold">Overall Monthly</span>
-              <span className="text-xs text-muted-foreground">23d left</span>
+              <span className="text-xs text-muted-foreground">this month</span>
             </div>
-            <span className="font-semibold">{formatCurrency(1867)}</span>
+            <span className="font-semibold">{formatCurrency(0)}</span>
           </div>
-          <Progress value={65} className="h-2" />
+          <Progress value={0} className="h-2" />
           <div className="flex justify-between items-center mt-2 text-sm text-muted-foreground">
-            <span>Spent 65%</span>
-            <span>{formatCurrency(640)} left this month</span>
+            <span>Spent 0%</span>
+            <span>{formatCurrency(0)} left this month</span>
           </div>
         </div>
       </CardContent>
