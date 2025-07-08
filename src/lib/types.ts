@@ -16,6 +16,8 @@ export type ExpenseCategory =
   | 'Sport'
   | 'Healthcare'
   | 'Fashion'
+  | 'Subscriptions'
+  | 'Restaurants'
   | 'Other';
 
 export const expenseCategories: ExpenseCategory[] = [
@@ -27,5 +29,7 @@ export const expenseCategories: ExpenseCategory[] = [
   'Sport',
   'Healthcare',
   'Fashion',
+  'Subscriptions',
+  'Restaurants',
   'Other',
 ];

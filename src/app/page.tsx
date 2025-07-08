@@ -5,7 +5,7 @@ export default function Home() {
     <div className="min-h-screen bg-background text-foreground">
       <main className="mx-auto max-w-3xl px-4 py-8">
         <h1 className="text-4xl font-bold tracking-tight md:text-5xl text-center mb-8">
-          GESTIONA TU <span className="text-chart-4">DINERO</span>
+          PLANIFICA TU <span className="text-chart-4">PRESUPUESTO</span>
         </h1>
         <Dashboard />
       </main>

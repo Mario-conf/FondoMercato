@@ -1,50 +1,65 @@
 import { Card, CardContent } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { AlertTriangle } from 'lucide-react';
 
 const formatCurrency = (value: number) => {
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
       currency: 'USD',
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
     }).format(value);
 };
 
+const budgetData = [
+  { name: 'Groceries', timeLeft: '2d left', amount: 94, spentPercent: 65, amountLeft: 24, period: 'week', indicatorClass: 'bg-chart-3' },
+  { name: 'Healthcare', timeLeft: '20d left', amount: 186, spentPercent: 65, amountLeft: 64, period: 'month', indicatorClass: 'bg-chart-4' },
+  { name: 'Subscriptions', timeLeft: '7h left', amount: 218, spentPercent: 95, amountLeft: 4, period: 'today', indicatorClass: 'bg-chart-1' },
+  { name: 'Restaurants', timeLeft: '2d left', amount: 83, spentPercent: 165, amountLeft: 0, period: 'week', indicatorClass: 'bg-chart-3' },
+];
+
+
 export default function Budgets() {
   return (
-    <div className="space-y-4">
-        <h2 className="text-3xl font-bold font-headline text-center">PRESUPUESTOS</h2>
-        <Card>
-            <CardContent className="pt-6 space-y-6">
-            <div>
-              <div className="flex justify-between items-center mb-2">
-                <div className="flex items-center gap-2">
-                    <span className="font-semibold">Groceries</span>
-                    <span className="text-xs text-muted-foreground">2d left</span>
-                </div>
-                <span className="font-semibold">{formatCurrency(94)}</span>
-              </div>
-              <Progress value={65} className="h-2" indicatorClassName="bg-chart-1" />
-              <div className="flex justify-between items-center mt-2 text-sm text-muted-foreground">
-                <span>Spent 65%</span>
-                <span>$24 left this week</span>
-              </div>
-            </div>
+    <Card>
+        <CardContent className="pt-6 space-y-6">
+          <div className="flex justify-between items-center">
+            <h3 className="font-semibold">Budget by category</h3>
+            <Tabs defaultValue="all" className="w-auto">
+                <TabsList className="h-8">
+                    <TabsTrigger value="all" className="text-xs">All</TabsTrigger>
+                    <TabsTrigger value="daily" className="text-xs">Daily</TabsTrigger>
+                    <TabsTrigger value="weekly" className="text-xs">Weekly</TabsTrigger>
+                    <TabsTrigger value="monthly" className="text-xs">Monthly</TabsTrigger>
+                </TabsList>
+            </Tabs>
+          </div>
 
-            <div>
+          {budgetData.map((budget, index) => (
+            <div key={index}>
               <div className="flex justify-between items-center mb-2">
                 <div className="flex items-center gap-2">
-                    <span className="font-semibold">Healthcare</span>
-                    <span className="text-xs text-muted-foreground">20d left</span>
+                    <span className="font-semibold">{budget.name}</span>
+                    <span className="text-xs text-muted-foreground">{budget.timeLeft}</span>
                 </div>
-                <span className="font-semibold">{formatCurrency(186)}</span>
+                <span className="font-semibold">{formatCurrency(budget.amount)}</span>
               </div>
-              <Progress value={65} className="h-2" indicatorClassName="bg-chart-4" />
+              <Progress value={Math.min(100, budget.spentPercent)} className="h-2" indicatorClassName={budget.indicatorClass} />
               <div className="flex justify-between items-center mt-2 text-sm text-muted-foreground">
-                <span>Spent 65%</span>
-                <span>$64 left this month</span>
+                <div className="flex items-center gap-1">
+                  <span>Spent {budget.spentPercent}%</span>
+                  {budget.spentPercent > 100 && (
+                    <AlertTriangle className="h-4 w-4 text-chart-4" />
+                  )}
+                </div>
+                <span>
+                  {formatCurrency(budget.amountLeft)} left this {budget.period}
+                </span>
               </div>
             </div>
-            </CardContent>
-        </Card>
-    </div>
+          ))}
+        </CardContent>
+    </Card>
   );
 }
