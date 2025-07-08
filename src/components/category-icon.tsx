@@ -2,23 +2,23 @@ import { Car, Home, MoreHorizontal, Shirt, ShoppingCart, TrendingUp, Lightbulb, 
 import type { ExpenseCategory } from '@/lib/types';
 
 interface CategoryIconProps {
-  category: ExpenseCategory | 'Income';
+  category: ExpenseCategory | 'Ingresos';
 }
 
-const iconMap: Record<ExpenseCategory | 'Income', React.ElementType> = {
-  Leisure: Martini,
-  Home: Home,
-  Healthcare: Pill,
-  Fashion: Shirt,
-  Utilities: Lightbulb,
-  Groceries: ShoppingCart,
-  Sport: Gamepad2,
-  Transport: Car,
-  Investments: Landmark,
-  Travel: Plane,
-  Gifts: Gift,
-  Other: MoreHorizontal,
-  Income: TrendingUp,
+const iconMap: Record<ExpenseCategory | 'Ingresos', React.ElementType> = {
+  Ocio: Martini,
+  Hogar: Home,
+  Salud: Pill,
+  Moda: Shirt,
+  Servicios: Lightbulb,
+  Comida: ShoppingCart,
+  Deporte: Gamepad2,
+  Transporte: Car,
+  Inversiones: Landmark,
+  Viajes: Plane,
+  Regalos: Gift,
+  Otros: MoreHorizontal,
+  Ingresos: TrendingUp,
 };
 
 export default function CategoryIcon({ category }: CategoryIconProps) {

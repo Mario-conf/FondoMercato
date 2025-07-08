@@ -2,6 +2,7 @@
 
 import { useMemo } from 'react';
 import { format, isToday, isYesterday } from 'date-fns';
+import { es } from 'date-fns/locale';
 import type { Transaction } from '@/lib/types';
 import CategoryIcon from './category-icon';
 import { cn } from '@/lib/utils';
@@ -11,16 +12,16 @@ interface TransactionsListProps {
 }
 
 const formatCurrency = (value: number) => {
-  return new Intl.NumberFormat('en-US', {
+  return new Intl.NumberFormat('es-ES', {
     style: 'currency',
-    currency: 'USD',
+    currency: 'USD', // You can change this to EUR or other currency
   }).format(value);
 };
 
 const formatDateGroup = (date: Date) => {
-  if (isToday(date)) return 'Today';
-  if (isYesterday(date)) return 'Yesterday';
-  return format(date, 'E, MMM d');
+  if (isToday(date)) return 'Hoy';
+  if (isYesterday(date)) return 'Ayer';
+  return format(date, 'E, d MMM', { locale: es });
 };
 
 export default function TransactionsList({
@@ -48,7 +49,7 @@ export default function TransactionsList({
       {transactionEntries.length > 0 ? (
         transactionEntries.map(([dateStr, transactionsOnDay]) => (
           <div key={dateStr}>
-            <h3 className="text-sm font-semibold text-muted-foreground my-2 px-1">
+            <h3 className="text-sm font-semibold text-muted-foreground my-2 px-1 capitalize">
               {formatDateGroup(new Date(dateStr))}
             </h3>
             <div className="space-y-2">
@@ -60,7 +61,7 @@ export default function TransactionsList({
                   <CategoryIcon category={t.category} />
                   <div className="flex-1">
                     <p className="font-semibold">
-                      {t.category === 'Income' ? t.description : t.category}
+                      {t.category === 'Ingresos' ? t.description : t.category}
                     </p>
                     <p className="text-xs text-muted-foreground">
                       {format(t.date, 'p')}
@@ -77,7 +78,7 @@ export default function TransactionsList({
         ))
       ) : (
         <div className="py-8 text-center text-muted-foreground rounded-xl bg-card">
-          No transactions to show.
+          No hay transacciones para mostrar.
         </div>
       )}
     </div>

@@ -59,7 +59,7 @@ export default function ExpensesByCategory({ transactions }: ExpensesByCategoryP
               </div>
             ))
           ) : (
-            <div className="py-8 text-center text-muted-foreground">No expenses to show.</div>
+            <div className="py-8 text-center text-muted-foreground">No hay gastos para mostrar.</div>
           )}
         </div>
       </CardContent>

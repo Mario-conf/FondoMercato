@@ -4,34 +4,34 @@ export type Transaction = {
   description: string;
   amount: number;
   type: 'income' | 'expense';
-  category: ExpenseCategory | 'Income';
+  category: ExpenseCategory | 'Ingresos';
 };
 
 export type ExpenseCategory =
-  | 'Leisure'
-  | 'Home'
-  | 'Healthcare'
-  | 'Fashion'
-  | 'Utilities'
-  | 'Groceries'
-  | 'Sport'
-  | 'Transport'
-  | 'Investments'
-  | 'Travel'
-  | 'Gifts'
-  | 'Other';
+  | 'Ocio'
+  | 'Hogar'
+  | 'Salud'
+  | 'Moda'
+  | 'Servicios'
+  | 'Comida'
+  | 'Deporte'
+  | 'Transporte'
+  | 'Inversiones'
+  | 'Viajes'
+  | 'Regalos'
+  | 'Otros';
 
 export const expenseCategories: ExpenseCategory[] = [
-  'Leisure',
-  'Home',
-  'Healthcare',
-  'Fashion',
-  'Utilities',
-  'Groceries',
-  'Sport',
-  'Transport',
-  'Investments',
-  'Travel',
-  'Gifts',
-  'Other',
+  'Ocio',
+  'Hogar',
+  'Salud',
+  'Moda',
+  'Servicios',
+  'Comida',
+  'Deporte',
+  'Transporte',
+  'Inversiones',
+  'Viajes',
+  'Regalos',
+  'Otros',
 ];

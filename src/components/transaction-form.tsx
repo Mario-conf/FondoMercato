@@ -41,10 +41,10 @@ interface TransactionFormProps {
 
 const formSchema = z.object({
   type: z.enum(['income', 'expense']),
-  amount: z.coerce.number().positive({ message: 'Amount must be positive' }),
-  description: z.string().min(2, { message: 'Description must be at least 2 characters.' }),
+  amount: z.coerce.number().positive({ message: 'La cantidad debe ser positiva' }),
+  description: z.string().min(2, { message: 'La descripción debe tener al menos 2 caracteres.' }),
   date: z.date(),
-  category: z.string().min(1, { message: 'Please select a category.' }),
+  category: z.string().min(1, { message: 'Por favor, selecciona una categoría.' }),
 });
 
 export default function TransactionForm({ isOpen, onOpenChange, onAddTransaction }: TransactionFormProps) {
@@ -69,8 +69,8 @@ export default function TransactionForm({ isOpen, onOpenChange, onAddTransaction
     if (!description) {
       toast({
         variant: 'destructive',
-        title: 'Description needed',
-        description: 'Please enter a description to get a category suggestion.',
+        title: 'Descripción necesaria',
+        description: 'Por favor, introduce una descripción para obtener una sugerencia de categoría.',
       });
       return;
     }
@@ -83,13 +83,13 @@ export default function TransactionForm({ isOpen, onOpenChange, onAddTransaction
       if (result.suggestedCategory) {
         form.setValue('category', result.suggestedCategory);
         toast({
-          title: 'AI Suggestion',
-          description: `We've categorized this as "${result.suggestedCategory}".`,
+          title: 'Sugerencia de IA',
+          description: `Hemos categorizado esto como "${result.suggestedCategory}".`,
         });
       } else {
          toast({
-          title: 'No Suggestion',
-          description: `The AI couldn't determine a category.`,
+          title: 'Sin Sugerencia',
+          description: `La IA no pudo determinar una categoría.`,
         });
       }
     } catch (error) {
@@ -106,7 +106,7 @@ export default function TransactionForm({ isOpen, onOpenChange, onAddTransaction
   function onSubmit(values: z.infer<typeof formSchema>) {
     const finalValues = {
         ...values,
-        category: values.type === 'income' ? 'Income' : values.category,
+        category: values.type === 'income' ? 'Ingresos' : values.category,
         amount: Number(values.amount) // Ensure amount is a number
     }
     onAddTransaction(finalValues);
@@ -118,8 +118,8 @@ export default function TransactionForm({ isOpen, onOpenChange, onAddTransaction
     <Sheet open={isOpen} onOpenChange={onOpenChange}>
       <SheetContent className="flex flex-col">
         <SheetHeader>
-          <SheetTitle className="font-headline">New Transaction</SheetTitle>
-          <SheetDescription>Add a new income or expense to your tracker.</SheetDescription>
+          <SheetTitle className="font-headline">Nueva Transacción</SheetTitle>
+          <SheetDescription>Añade un nuevo ingreso o gasto a tu registro.</SheetDescription>
         </SheetHeader>
         <div className="flex-1 overflow-y-auto">
             <Form {...form}>
@@ -129,12 +129,12 @@ export default function TransactionForm({ isOpen, onOpenChange, onAddTransaction
                 name="type"
                 render={({ field }) => (
                     <FormItem className="space-y-3">
-                    <FormLabel>Transaction Type</FormLabel>
+                    <FormLabel>Tipo de Transacción</FormLabel>
                     <FormControl>
                         <RadioGroup
                         onValueChange={(value) => {
                             field.onChange(value);
-                            form.setValue('category', value === 'income' ? 'Income' : '');
+                            form.setValue('category', value === 'income' ? 'Ingresos' : '');
                         }}
                         defaultValue={field.value}
                         className="flex space-x-4"
@@ -143,13 +143,13 @@ export default function TransactionForm({ isOpen, onOpenChange, onAddTransaction
                             <FormControl>
                             <RadioGroupItem value="expense" id="expense" />
                             </FormControl>
-                            <FormLabel htmlFor="expense" className="font-normal">Expense</FormLabel>
+                            <FormLabel htmlFor="expense" className="font-normal">Gasto</FormLabel>
                         </FormItem>
                         <FormItem className="flex items-center space-x-2 space-y-0">
                             <FormControl>
                             <RadioGroupItem value="income" id="income" />
                             </FormControl>
-                            <FormLabel htmlFor="income" className="font-normal">Income</FormLabel>
+                            <FormLabel htmlFor="income" className="font-normal">Ingreso</FormLabel>
                         </FormItem>
                         </RadioGroup>
                     </FormControl>
@@ -163,7 +163,7 @@ export default function TransactionForm({ isOpen, onOpenChange, onAddTransaction
                 name="amount"
                 render={({ field }) => (
                     <FormItem>
-                    <FormLabel>Amount</FormLabel>
+                    <FormLabel>Cantidad</FormLabel>
                     <FormControl>
                         <Input type="number" placeholder="0.00" {...field} />
                     </FormControl>
@@ -177,9 +177,9 @@ export default function TransactionForm({ isOpen, onOpenChange, onAddTransaction
                 name="description"
                 render={({ field }) => (
                     <FormItem>
-                    <FormLabel>Description</FormLabel>
+                    <FormLabel>Descripción</FormLabel>
                     <FormControl>
-                        <Input placeholder="e.g., Coffee, Salary" {...field} />
+                        <Input placeholder="p. ej., Café, Salario" {...field} />
                     </FormControl>
                     <FormMessage />
                     </FormItem>
@@ -193,16 +193,16 @@ export default function TransactionForm({ isOpen, onOpenChange, onAddTransaction
                     render={({ field }) => (
                     <FormItem>
                         <div className="flex justify-between items-center">
-                            <FormLabel>Category</FormLabel>
+                            <FormLabel>Categoría</FormLabel>
                             <Button variant="outline" size="sm" type="button" onClick={handleSuggestCategory} disabled={isAiLoading}>
                                 <Sparkles className={cn("mr-2 h-4 w-4", isAiLoading && "animate-spin")}/>
-                                Suggest
+                                Sugerir
                             </Button>
                         </div>
                         <Select onValueChange={field.onChange} value={field.value}>
                         <FormControl>
                             <SelectTrigger>
-                            <SelectValue placeholder="Select a category" />
+                            <SelectValue placeholder="Selecciona una categoría" />
                             </SelectTrigger>
                         </FormControl>
                         <SelectContent>
@@ -222,7 +222,7 @@ export default function TransactionForm({ isOpen, onOpenChange, onAddTransaction
                 name="date"
                 render={({ field }) => (
                     <FormItem className="flex flex-col">
-                    <FormLabel>Date</FormLabel>
+                    <FormLabel>Fecha</FormLabel>
                     <Popover>
                         <PopoverTrigger asChild>
                         <FormControl>
@@ -233,7 +233,7 @@ export default function TransactionForm({ isOpen, onOpenChange, onAddTransaction
                                 !field.value && 'text-muted-foreground'
                             )}
                             >
-                            {field.value ? format(field.value, 'PPP') : <span>Pick a date</span>}
+                            {field.value ? format(field.value, 'PPP') : <span>Elige una fecha</span>}
                             <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
                             </Button>
                         </FormControl>
@@ -258,7 +258,7 @@ export default function TransactionForm({ isOpen, onOpenChange, onAddTransaction
         </div>
         <SheetFooter className="pt-4 border-t">
           <Button type="submit" form="transaction-form" className="w-full bg-primary hover:bg-primary/90">
-            Add Transaction
+            Añadir Transacción
           </Button>
         </SheetFooter>
       </SheetContent>

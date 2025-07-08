@@ -14,7 +14,7 @@ export async function getCategorySuggestion(
   const parsed = CategorizeSchema.safeParse({ description });
 
   if (!parsed.success) {
-    return { suggestedCategory: null, error: 'Invalid description' };
+    return { suggestedCategory: null, error: 'Descripción inválida' };
   }
 
   if (!parsed.data.description) {
@@ -27,10 +27,10 @@ export async function getCategorySuggestion(
     if (expenseCategories.includes(result.suggestedCategory as ExpenseCategory)) {
       return { suggestedCategory: result.suggestedCategory as ExpenseCategory };
     } else {
-      return { suggestedCategory: 'Other' };
+      return { suggestedCategory: 'Otros' };
     }
   } catch (e) {
     console.error(e);
-    return { suggestedCategory: null, error: 'AI categorization failed.' };
+    return { suggestedCategory: null, error: 'La categorización con IA ha fallado.' };
   }
 }

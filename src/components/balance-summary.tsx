@@ -38,7 +38,7 @@ export default function BalanceSummary({ transactions }: BalanceSummaryProps) {
   return (
     <Card className="border-none shadow-none bg-transparent">
       <CardContent className="p-6 text-center flex flex-col items-center">
-        <p className="text-sm text-muted-foreground">Net Income</p>
+        <p className="text-sm text-muted-foreground">Balance Neto</p>
         <p className="text-5xl font-bold font-headline tracking-tighter mt-1">
           {formatCurrency(total)}
         </p>

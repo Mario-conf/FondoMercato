@@ -12,22 +12,23 @@
 
 import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
+import { expenseCategories } from '@/lib/types';
 
 const CategorizeExpenseInputSchema = z.object({
   transactionDescription: z
     .string()
-    .describe('The description of the uncategorized transaction.'),
+    .describe('La descripción de la transacción sin categorizar.'),
 });
 export type CategorizeExpenseInput = z.infer<typeof CategorizeExpenseInputSchema>;
 
 const CategorizeExpenseOutputSchema = z.object({
   suggestedCategory: z
     .string()
-    .describe('The AI-suggested category for the expense.'),
+    .describe('La categoría sugerida por la IA para el gasto.'),
   confidenceScore: z
     .number()
     .describe(
-      'A score between 0 and 1 indicating the AI model’s confidence in the suggested category.'
+      'Una puntuación entre 0 y 1 que indica la confianza del modelo de IA en la categoría sugerida.'
     ),
 });
 export type CategorizeExpenseOutput = z.infer<typeof CategorizeExpenseOutputSchema>;
@@ -40,11 +41,11 @@ const prompt = ai.definePrompt({
   name: 'categorizeExpensePrompt',
   input: {schema: CategorizeExpenseInputSchema},
   output: {schema: CategorizeExpenseOutputSchema},
-  prompt: `Given the following transaction description, suggest a category for the expense and a confidence score between 0 and 1:
+  prompt: `Dada la siguiente descripción de transacción, sugiere una categoría para el gasto y una puntuación de confianza entre 0 y 1. La categoría debe ser una de las siguientes: ${expenseCategories.join(', ')}.
 
-Transaction Description: {{{transactionDescription}}}
+Descripción de la Transacción: {{{transactionDescription}}}
 
-Respond in JSON format with the suggestedCategory and confidenceScore fields.`,
+Responde en formato JSON con los campos suggestedCategory y confidenceScore.`,
 });
 
 const categorizeExpenseFlow = ai.defineFlow(

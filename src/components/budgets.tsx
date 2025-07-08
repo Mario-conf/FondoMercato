@@ -22,13 +22,13 @@ export default function Budgets() {
     <Card>
         <CardContent className="pt-6 space-y-6">
           <div className="flex justify-between items-center">
-            <h3 className="font-semibold">Budget by category</h3>
+            <h3 className="font-semibold">Presupuesto por categoría</h3>
             <Tabs defaultValue="all" className="w-auto">
                 <TabsList className="h-8">
-                    <TabsTrigger value="all" className="text-xs">All</TabsTrigger>
-                    <TabsTrigger value="daily" className="text-xs">Daily</TabsTrigger>
-                    <TabsTrigger value="weekly" className="text-xs">Weekly</TabsTrigger>
-                    <TabsTrigger value="monthly" className="text-xs">Monthly</TabsTrigger>
+                    <TabsTrigger value="all" className="text-xs">Todos</TabsTrigger>
+                    <TabsTrigger value="daily" className="text-xs">Diario</TabsTrigger>
+                    <TabsTrigger value="weekly" className="text-xs">Semanal</TabsTrigger>
+                    <TabsTrigger value="monthly" className="text-xs">Mensual</TabsTrigger>
                 </TabsList>
             </Tabs>
           </div>
@@ -46,20 +46,20 @@ export default function Budgets() {
                 <Progress value={Math.min(100, budget.spentPercent)} className="h-2" indicatorClassName={budget.indicatorClass} />
                 <div className="flex justify-between items-center mt-2 text-sm text-muted-foreground">
                   <div className="flex items-center gap-1">
-                    <span>Spent {budget.spentPercent}%</span>
+                    <span>Gastado {budget.spentPercent}%</span>
                     {budget.spentPercent > 100 && (
                       <AlertTriangle className="h-4 w-4 text-chart-4" />
                     )}
                   </div>
                   <span>
-                    {formatCurrency(budget.amountLeft)} left this {budget.period}
+                    Quedan {formatCurrency(budget.amountLeft)} este {budget.period}
                   </span>
                 </div>
               </div>
             ))
           ) : (
              <div className="py-8 text-center text-muted-foreground rounded-xl bg-secondary">
-                No budgets have been created.
+                No se han creado presupuestos.
              </div>
           )}
         </CardContent>

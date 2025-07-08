@@ -59,13 +59,13 @@ export default function OverviewChart({ transactions }: OverviewChartProps) {
                 cursor={{ fill: 'hsl(var(--secondary))' }}
               />
               <Legend wrapperStyle={{fontSize: "12px"}}/>
-              <Bar dataKey="income" fill="hsl(var(--chart-1))" name="Income" radius={[4, 4, 0, 0]} />
-              <Bar dataKey="expense" fill="hsl(var(--chart-2))" name="Expense" radius={[4, 4, 0, 0]} />
+              <Bar dataKey="income" fill="hsl(var(--chart-1))" name="Ingresos" radius={[4, 4, 0, 0]} />
+              <Bar dataKey="expense" fill="hsl(var(--chart-2))" name="Gastos" radius={[4, 4, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
         ) : (
           <div className="flex h-full items-center justify-center text-muted-foreground">
-            Not enough data to display chart.
+            No hay suficientes datos para mostrar el gráfico.
           </div>
         )}
       </CardContent>
