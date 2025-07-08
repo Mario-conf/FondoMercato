@@ -8,28 +8,30 @@ export type Transaction = {
 };
 
 export type ExpenseCategory =
-  | 'Groceries'
-  | 'Transport'
-  | 'Home'
-  | 'Utilities'
   | 'Leisure'
-  | 'Sport'
+  | 'Home'
   | 'Healthcare'
   | 'Fashion'
-  | 'Subscriptions'
-  | 'Restaurants'
+  | 'Utilities'
+  | 'Groceries'
+  | 'Sport'
+  | 'Transport'
+  | 'Investments'
+  | 'Travel'
+  | 'Gifts'
   | 'Other';
 
 export const expenseCategories: ExpenseCategory[] = [
-  'Groceries',
-  'Transport',
-  'Home',
-  'Utilities',
   'Leisure',
-  'Sport',
+  'Home',
   'Healthcare',
   'Fashion',
-  'Subscriptions',
-  'Restaurants',
+  'Utilities',
+  'Groceries',
+  'Sport',
+  'Transport',
+  'Investments',
+  'Travel',
+  'Gifts',
   'Other',
 ];
