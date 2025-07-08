@@ -40,7 +40,7 @@ export default function CategoriesList() {
                 </div>
               ))}
             </div>
-            <Button className="w-full mt-6 h-12 text-base font-semibold bg-chart-4 text-background hover:bg-chart-4/90">
+            <Button className="w-full mt-6 h-12 text-base font-semibold">
               Add New Expense Category
             </Button>
           </TabsContent>
@@ -59,7 +59,7 @@ export default function CategoriesList() {
                 </div>
               ))}
             </div>
-             <Button className="w-full mt-6 h-12 text-base font-semibold bg-chart-4 text-background hover:bg-chart-4/90">
+             <Button className="w-full mt-6 h-12 text-base font-semibold">
                 Add New Income Category
             </Button>
           </TabsContent>
