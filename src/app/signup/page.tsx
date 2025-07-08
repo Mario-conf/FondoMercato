@@ -20,7 +20,15 @@ export default function SignupPage() {
   const handleSignup = (e: React.FormEvent) => {
     e.preventDefault();
     if (email && password) {
-      signup();
+      try {
+        signup({ email, password });
+      } catch (error) {
+        toast({
+          variant: 'destructive',
+          title: 'Error de Registro',
+          description: error instanceof Error ? error.message : 'Ocurrió un error inesperado.',
+        });
+      }
     } else {
       toast({
         variant: 'destructive',

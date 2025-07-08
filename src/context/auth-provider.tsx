@@ -6,9 +6,9 @@ import LoadingScreen from '@/components/loading-screen';
 
 interface AuthContextType {
   isAuthenticated: boolean;
-  login: () => void;
+  login: (credentials: { email: string; password: string }) => void;
   logout: () => void;
-  signup: () => void;
+  signup: (credentials: { email: string; password: string }) => void;
   completeOnboarding: () => void;
 }
 
@@ -16,6 +16,31 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 const AUTH_KEY = 'fondo_mercato_auth';
 const ONBOARDING_KEY = 'fondo_mercato_onboarding_complete';
+const USERS_KEY = 'fondo_mercato_users';
+
+const getRegisteredUsers = (): { email: string; password: string }[] => {
+  if (typeof window !== 'undefined') {
+    try {
+      const users = window.localStorage.getItem(USERS_KEY);
+      return users ? JSON.parse(users) : [];
+    } catch (error) {
+      console.error('Failed to get users from localStorage:', error);
+      return [];
+    }
+  }
+  return [];
+};
+
+const saveRegisteredUsers = (users: { email: string; password: string }[]) => {
+  if (typeof window !== 'undefined') {
+    try {
+      window.localStorage.setItem(USERS_KEY, JSON.stringify(users));
+    } catch (error) {
+      console.error('Failed to save users to localStorage:', error);
+    }
+  }
+};
+
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
@@ -65,19 +90,36 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   }, [isAuthenticated, onboardingComplete, isAuthLoading, isSplashScreenVisible, pathname, router]);
 
-  const login = () => {
-    window.localStorage.setItem(AUTH_KEY, 'true');
-    setIsAuthenticated(true);
-    const onboardingStatus = window.localStorage.getItem(ONBOARDING_KEY) === 'true';
-    setOnboardingComplete(onboardingStatus);
-    if (!onboardingStatus) {
+  const login = ({ email, password }: { email: string; password: string }) => {
+    const users = getRegisteredUsers();
+    const user = users.find(u => u.email === email && u.password === password);
+    
+    if (user) {
+      window.localStorage.setItem(AUTH_KEY, 'true');
+      setIsAuthenticated(true);
+      const onboardingStatus = window.localStorage.getItem(ONBOARDING_KEY) === 'true';
+      setOnboardingComplete(onboardingStatus);
+      if (!onboardingStatus) {
         router.push('/onboarding');
-    } else {
+      } else {
         router.push('/');
+      }
+    } else {
+        throw new Error('Credenciales incorrectas o usuario no registrado.');
     }
   };
   
-  const signup = () => {
+  const signup = ({ email, password }: { email: string; password: string }) => {
+    const users = getRegisteredUsers();
+    const userExists = users.some(u => u.email === email);
+
+    if (userExists) {
+      throw new Error('Este email ya está registrado.');
+    }
+
+    const newUsers = [...users, { email, password }];
+    saveRegisteredUsers(newUsers);
+
     window.localStorage.setItem(AUTH_KEY, 'true');
     window.localStorage.removeItem(ONBOARDING_KEY);
     setIsAuthenticated(true);

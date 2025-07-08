@@ -19,9 +19,16 @@ export default function LoginPage() {
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    // In a real app, you'd validate credentials against a backend
     if (email && password) {
-      login();
+      try {
+        login({ email, password });
+      } catch (error) {
+        toast({
+          variant: 'destructive',
+          title: 'Error de Inicio de Sesión',
+          description: error instanceof Error ? error.message : 'Ocurrió un error inesperado.',
+        });
+      }
     } else {
       toast({
         variant: 'destructive',
