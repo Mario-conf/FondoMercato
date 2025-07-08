@@ -4,11 +4,20 @@ import React, { createContext, useContext, useState, useEffect, ReactNode } from
 import { useRouter, usePathname } from 'next/navigation';
 import LoadingScreen from '@/components/loading-screen';
 
+interface User {
+  name: string;
+  email: string;
+  password: string; // In a real app, this would be a hash
+}
+
 interface AuthContextType {
   isAuthenticated: boolean;
+  user: User | null;
   login: (credentials: { email: string; password: string }) => void;
   logout: () => void;
   signup: (credentials: { email: string; password: string }) => void;
+  updateUser: (data: { name: string; email: string }) => void;
+  changePassword: (data: { currentPassword; newPassword }) => void;
   completeOnboarding: () => void;
 }
 
@@ -17,8 +26,9 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 const AUTH_KEY = 'fondo_mercato_auth';
 const ONBOARDING_KEY = 'fondo_mercato_onboarding_complete';
 const USERS_KEY = 'fondo_mercato_users';
+const CURRENT_USER_EMAIL_KEY = 'fondo_mercato_current_user_email';
 
-const getRegisteredUsers = (): { email: string; password: string }[] => {
+const getRegisteredUsers = (): User[] => {
   if (typeof window !== 'undefined') {
     try {
       const users = window.localStorage.getItem(USERS_KEY);
@@ -31,7 +41,7 @@ const getRegisteredUsers = (): { email: string; password: string }[] => {
   return [];
 };
 
-const saveRegisteredUsers = (users: { email: string; password: string }[]) => {
+const saveRegisteredUsers = (users: User[]) => {
   if (typeof window !== 'undefined') {
     try {
       window.localStorage.setItem(USERS_KEY, JSON.stringify(users));
@@ -44,6 +54,7 @@ const saveRegisteredUsers = (users: { email: string; password: string }[]) => {
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+  const [user, setUser] = useState<User | null>(null);
   const [onboardingComplete, setOnboardingComplete] = useState<boolean>(false);
   const [isAuthLoading, setIsAuthLoading] = useState(true);
   const [isSplashScreenVisible, setIsSplashScreenVisible] = useState(true);
@@ -51,32 +62,34 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const pathname = usePathname();
 
   useEffect(() => {
-    // 3-second cosmetic splash screen timer
     const splashTimer = setTimeout(() => {
       setIsSplashScreenVisible(false);
     }, 3000);
 
-    // This effect runs on the client to check auth status from localStorage
     try {
       const authStatus = window.localStorage.getItem(AUTH_KEY) === 'true';
       const onboardingStatus = window.localStorage.getItem(ONBOARDING_KEY) === 'true';
       setIsAuthenticated(authStatus);
       setOnboardingComplete(onboardingStatus);
+
+      if (authStatus) {
+        const userEmail = window.localStorage.getItem(CURRENT_USER_EMAIL_KEY);
+        if (userEmail) {
+          const users = getRegisteredUsers();
+          const currentUser = users.find(u => u.email === userEmail);
+          setUser(currentUser || null);
+        }
+      }
     } catch (error) {
         console.error("Could not access localStorage", error);
     }
-    // Mark the auth check as complete
     setIsAuthLoading(false);
     
     return () => clearTimeout(splashTimer);
   }, []);
 
   useEffect(() => {
-    // Wait until auth is loaded to perform redirects
-    if (isAuthLoading) return;
-    
-    // But don't redirect away from the splash screen while it's visible
-    if (isSplashScreenVisible) return;
+    if (isAuthLoading || isSplashScreenVisible) return;
 
     const publicRoutes = ['/login', '/signup'];
     const isOnboardingRoute = pathname === '/onboarding';
@@ -92,11 +105,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const login = ({ email, password }: { email: string; password: string }) => {
     const users = getRegisteredUsers();
-    const user = users.find(u => u.email === email && u.password === password);
+    const foundUser = users.find(u => u.email === email && u.password === password);
     
-    if (user) {
+    if (foundUser) {
       window.localStorage.setItem(AUTH_KEY, 'true');
+      window.localStorage.setItem(CURRENT_USER_EMAIL_KEY, email);
       setIsAuthenticated(true);
+      setUser(foundUser);
       const onboardingStatus = window.localStorage.getItem(ONBOARDING_KEY) === 'true';
       setOnboardingComplete(onboardingStatus);
       if (!onboardingStatus) {
@@ -117,21 +132,66 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       throw new Error('Este email ya está registrado.');
     }
 
-    const newUsers = [...users, { email, password }];
+    const name = email.split('@')[0];
+    const newUser: User = { name, email, password };
+    const newUsers = [...users, newUser];
     saveRegisteredUsers(newUsers);
 
+    // Log the user in after signup
     window.localStorage.setItem(AUTH_KEY, 'true');
-    window.localStorage.removeItem(ONBOARDING_KEY);
+    window.localStorage.setItem(CURRENT_USER_EMAIL_KEY, email);
+    window.localStorage.removeItem(ONBOARDING_KEY); // Ensure onboarding is triggered
+    
     setIsAuthenticated(true);
+    setUser(newUser);
     setOnboardingComplete(false);
-    setIsSplashScreenVisible(false);
+    setIsSplashScreenVisible(false); // Skip splash screen after signup
     router.push('/onboarding');
   };
 
   const logout = () => {
     window.localStorage.removeItem(AUTH_KEY);
+    window.localStorage.removeItem(CURRENT_USER_EMAIL_KEY);
+    window.localStorage.removeItem(ONBOARDING_KEY); // Also clear onboarding status on logout
     setIsAuthenticated(false);
+    setUser(null);
     router.push('/login');
+  };
+
+  const updateUser = (data: { name: string; email: string }) => {
+    if (!user) throw new Error("No hay un usuario autenticado.");
+    
+    let users = getRegisteredUsers();
+    
+    if (data.email !== user.email && users.some(u => u.email === data.email)) {
+      throw new Error("El nuevo email ya está en uso.");
+    }
+    
+    const userIndex = users.findIndex(u => u.email === user.email);
+    if (userIndex === -1) throw new Error("No se pudo encontrar el usuario para actualizar.");
+    
+    const updatedUser = { ...users[userIndex], name: data.name, email: data.email };
+    users[userIndex] = updatedUser;
+    
+    saveRegisteredUsers(users);
+    setUser(updatedUser);
+    window.localStorage.setItem(CURRENT_USER_EMAIL_KEY, updatedUser.email);
+  };
+
+  const changePassword = ({ currentPassword, newPassword }: { currentPassword; newPassword }) => {
+    if (!user) throw new Error("No hay un usuario autenticado.");
+    if (user.password !== currentPassword) throw new Error("La contraseña actual es incorrecta.");
+    
+    let users = getRegisteredUsers();
+    const userIndex = users.findIndex(u => u.email === user.email);
+
+    if (userIndex === -1) throw new Error("No se pudo encontrar el usuario para actualizar.");
+    
+    const updatedUser = { ...users[userIndex], password: newPassword };
+    users[userIndex] = updatedUser;
+    
+    saveRegisteredUsers(users);
+    setUser(updatedUser);
   };
   
   const completeOnboarding = () => {
@@ -140,15 +200,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     router.push('/');
   };
 
-  const value = { isAuthenticated, login, logout, signup, completeOnboarding };
+  const value = { isAuthenticated, user, login, logout, signup, updateUser, changePassword, completeOnboarding };
 
-  // Show splash screen if it's not done yet.
   if (isSplashScreenVisible) {
     return <LoadingScreen />;
   }
 
-  // After splash screen, if auth is still loading for any reason,
-  // return null to prevent flicker, unless we are on a public auth page.
   const isAuthPage = ['/login', '/signup', '/onboarding'].includes(pathname);
   if (isAuthLoading && !isAuthPage) {
     return null;

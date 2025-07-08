@@ -1,10 +1,66 @@
 'use client';
 
+import { useEffect } from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import * as z from 'zod';
 import { ArrowLeft } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form';
+import { useAuth } from '@/context/auth-provider';
+import { useToast } from '@/hooks/use-toast';
+
+const profileSchema = z.object({
+  name: z.string().min(2, { message: 'El nombre debe tener al menos 2 caracteres.' }),
+  email: z.string().email({ message: 'Por favor, introduce un email válido.' }),
+});
 
 export default function ProfileSettingsPage() {
   const router = useRouter();
+  const { user, updateUser } = useAuth();
+  const { toast } = useToast();
+
+  const form = useForm<z.infer<typeof profileSchema>>({
+    resolver: zodResolver(profileSchema),
+    defaultValues: {
+      name: '',
+      email: '',
+    },
+  });
+
+  useEffect(() => {
+    if (user) {
+      form.reset({
+        name: user.name,
+        email: user.email,
+      });
+    }
+  }, [user, form]);
+
+  const onSubmit = (values: z.infer<typeof profileSchema>) => {
+    try {
+      updateUser(values);
+      toast({
+        title: 'Perfil Actualizado',
+        description: 'Tus datos se han guardado correctamente.',
+      });
+    } catch (error) {
+      toast({
+        variant: 'destructive',
+        title: 'Error al actualizar',
+        description: error instanceof Error ? error.message : 'Ocurrió un error inesperado.',
+      });
+    }
+  };
 
   return (
     <div className="min-h-screen bg-background text-foreground">
@@ -20,11 +76,39 @@ export default function ProfileSettingsPage() {
         </h1>
       </header>
       <main className="p-4">
-        <div className="text-center py-10">
-          <p className="text-muted-foreground">
-            Ajustes de perfil próximamente.
-          </p>
-        </div>
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+            <FormField
+              control={form.control}
+              name="name"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Nombre</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Tu nombre" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="email"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Email</FormLabel>
+                  <FormControl>
+                    <Input type="email" placeholder="tu@email.com" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <Button type="submit" className="w-full">
+              Guardar Cambios
+            </Button>
+          </form>
+        </Form>
       </main>
     </div>
   );
