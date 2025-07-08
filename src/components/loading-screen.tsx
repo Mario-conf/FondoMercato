@@ -9,7 +9,7 @@ export default function LoadingScreen() {
 
   useEffect(() => {
     // A tiny delay ensures the component has rendered before starting the animation.
-    // This triggers the CSS transition from 0 to 100 over 5 seconds.
+    // This triggers the CSS transition from 0 to 100 over 3 seconds.
     const timer = setTimeout(() => {
       setProgress(100);
     }, 10);
@@ -28,7 +28,7 @@ export default function LoadingScreen() {
         unoptimized
       />
       <div className="w-64">
-         <Progress value={progress} className="h-2 bg-accent" indicatorClassName="bg-primary transition-all duration-[5000ms] ease-linear" />
+         <Progress value={progress} className="h-2 bg-accent" indicatorClassName="bg-primary transition-all duration-[3000ms] ease-linear" />
       </div>
     </div>
   );

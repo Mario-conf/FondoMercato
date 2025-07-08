@@ -26,10 +26,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const pathname = usePathname();
 
   useEffect(() => {
-    // 5-second cosmetic splash screen timer
+    // 3-second cosmetic splash screen timer
     const splashTimer = setTimeout(() => {
       setIsSplashScreenDone(true);
-    }, 5000);
+    }, 3000);
 
     // This effect runs on the client to check auth status from localStorage
     try {
