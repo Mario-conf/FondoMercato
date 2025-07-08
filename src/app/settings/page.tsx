@@ -66,8 +66,8 @@ export default function SettingsPage() {
           </Button>
         </div>
         <div className="text-center text-xs text-muted-foreground pt-4">
-            <p>&copy; {new Date().getFullYear()} Albaydex. Todos los derechos reservados.</p>
-            <p>Hecho con ❤️ por el equipo de Albaydex.</p>
+            <p>© 2025 Fondo Mercato. Todos los derechos reservados.</p>
+            <p>Una aplicación de Albaydex.</p>
         </div>
       </main>
     </div>
