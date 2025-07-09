@@ -4,6 +4,7 @@ import { Toaster } from '@/components/ui/toaster';
 import { DataProvider } from '@/context/data-provider';
 import { AuthProvider } from '@/context/auth-provider';
 import AppShell from '@/components/app-shell';
+import Script from 'next/script';
 
 export const metadata: Metadata = {
   title: 'Fondo Mercato - Your Personal Finance Tracker',
@@ -71,6 +72,16 @@ export default function RootLayout({
                 <Toaster />
             </DataProvider>
         </AuthProvider>
+        <Script async src="https://www.googletagmanager.com/gtag/js?id=G-6Z0BHCJ1DQ"></Script>
+        <Script id="google-analytics">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+
+            gtag('config', 'G-6Z0BHCJ1DQ');
+          `}
+        </Script>
       </body>
     </html>
   );
