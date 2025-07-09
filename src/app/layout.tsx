@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import './globals.css';
 import { Toaster } from '@/components/ui/toaster';
 import { DataProvider } from '@/context/data-provider';
@@ -10,7 +10,6 @@ export const metadata: Metadata = {
   description: 'Take control of your finances with Fondo Mercato. Track income, manage expenses, create budgets, and achieve your financial goals with ease.',
   keywords: ['finance', 'tracker', 'budget', 'expenses', 'income', 'money', 'pwa', 'fintech'],
   manifest: '/manifest.json',
-  themeColor: '#624CAB',
   appleWebApp: {
     capable: true,
     statusBarStyle: 'black-translucent',
@@ -37,6 +36,10 @@ export const metadata: Metadata = {
     description: 'Take control of your finances with Fondo Mercato. Track income, manage expenses, create budgets, and achieve your financial goals with ease.',
     images: ['https://placehold.co/1200x630.png'],
   },
+};
+
+export const viewport: Viewport = {
+  themeColor: '#624CAB',
 };
 
 export default function RootLayout({

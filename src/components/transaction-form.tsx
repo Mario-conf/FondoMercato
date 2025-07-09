@@ -46,14 +46,12 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
-import { CalendarIcon, Trash2, Sparkles } from 'lucide-react';
+import { CalendarIcon, Trash2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
-import { useEffect, useState } from 'react';
-import { useToast } from '@/hooks/use-toast';
+import { useEffect } from 'react';
 import { useData } from '@/context/data-provider';
-import { getCategorySuggestion } from '@/lib/actions';
 
 interface TransactionFormProps {
   isOpen: boolean;
@@ -76,7 +74,6 @@ export default function TransactionForm({
   isOpen,
   onOpenChange,
 }: TransactionFormProps) {
-  const { toast } = useToast();
   const {
     expenseCategories,
     incomeCategories,
@@ -87,8 +84,6 @@ export default function TransactionForm({
     setEditingTransaction,
   } = useData();
 
-  const [isSuggesting, setIsSuggesting] = useState(false);
-  const [aiSuggested, setAiSuggested] = useState(false);
   const isEditMode = !!editingTransaction;
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -102,7 +97,6 @@ export default function TransactionForm({
     },
   });
   
-  const descriptionValue = form.watch('description');
   const transactionType = form.watch('type');
 
   useEffect(() => {
@@ -120,42 +114,7 @@ export default function TransactionForm({
         category: '',
       });
     }
-  }, [editingTransaction, form, isOpen]); // Added isOpen to dependencies
-
-  useEffect(() => {
-    if (
-      transactionType !== 'expense' ||
-      !descriptionValue ||
-      descriptionValue.length < 5
-    ) {
-      setAiSuggested(false);
-      return;
-    }
-
-    const handler = setTimeout(async () => {
-      setIsSuggesting(true);
-      setAiSuggested(false);
-      try {
-        const { suggestedCategory, error } = await getCategorySuggestion(
-          descriptionValue
-        );
-        if (error) {
-          console.error(error);
-        } else if (suggestedCategory) {
-          form.setValue('category', suggestedCategory, { shouldValidate: true });
-          setAiSuggested(true);
-        }
-      } catch (e) {
-        console.error('Failed to get category suggestion:', e);
-      } finally {
-        setIsSuggesting(false);
-      }
-    }, 1000);
-
-    return () => {
-      clearTimeout(handler);
-    };
-  }, [descriptionValue, transactionType, form]);
+  }, [editingTransaction, form, isOpen]);
 
   const handleOpenChange = (open: boolean) => {
     onOpenChange(open);
@@ -329,16 +288,9 @@ export default function TransactionForm({
                 name="category"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="flex items-center gap-2">
-                      Categoría
-                      {isSuggesting && <Sparkles className="h-4 w-4 animate-pulse text-primary" />}
-                      {!isSuggesting && aiSuggested && <Sparkles className="h-4 w-4 text-primary" />}
-                    </FormLabel>
+                    <FormLabel>Categoría</FormLabel>
                     <Select
-                      onValueChange={(value) => {
-                        field.onChange(value);
-                        setAiSuggested(false); // User made a manual choice
-                      }}
+                      onValueChange={field.onChange}
                       value={field.value}
                     >
                       <FormControl>
