@@ -35,3 +35,4 @@ export const appImages = {
     hint: 'logo',
   },
 };
+
