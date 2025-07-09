@@ -12,9 +12,9 @@ interface TransactionsListProps {
 }
 
 const formatCurrency = (value: number) => {
-  return new Intl.NumberFormat('en-US', {
+  return new Intl.NumberFormat('es-ES', {
     style: 'currency',
-    currency: 'USD',
+    currency: 'EUR',
   }).format(value);
 };
 

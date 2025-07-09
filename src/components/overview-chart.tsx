@@ -17,9 +17,9 @@ interface OverviewChartProps {
 }
 
 const formatCurrency = (value: number) => {
-  return new Intl.NumberFormat('en-US', {
+  return new Intl.NumberFormat('es-ES', {
     style: 'currency',
-    currency: 'USD',
+    currency: 'EUR',
     notation: 'compact',
     compactDisplay: 'short',
     minimumFractionDigits: 0,
@@ -28,9 +28,9 @@ const formatCurrency = (value: number) => {
 };
 
 const formatFullCurrency = (value: number) => {
-  return new Intl.NumberFormat('en-US', {
+  return new Intl.NumberFormat('es-ES', {
     style: 'currency',
-    currency: 'USD',
+    currency: 'EUR',
   }).format(value);
 };
 
@@ -97,7 +97,7 @@ export default function OverviewChart({ transactions }: OverviewChartProps) {
           <BarChart
             accessibilityLayer
             data={chartData}
-            margin={{ top: 5, right: 0, left: -20, bottom: 0 }}
+            margin={{ top: 5, right: 0, left: 0, bottom: 0 }}
           >
             <CartesianGrid vertical={false} />
             <XAxis
