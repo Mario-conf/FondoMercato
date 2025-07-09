@@ -42,7 +42,7 @@ export default function BalanceSummary({ transactions, title = 'Balance Neto' }:
         </div>
         <div className="flex min-w-[158px] flex-1 flex-col gap-2 rounded-xl p-6 border">
           <p className="text-base font-medium leading-normal">Gastos</p>
-          <p className="tracking-light text-2xl font-bold leading-tight">{formatCurrency(expenses)}</p>
+          <p className="tracking-light text-2xl font-bold leading-tight text-chart-2">{formatCurrency(expenses)}</p>
         </div>
       </div>
     </div>
