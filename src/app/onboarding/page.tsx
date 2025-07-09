@@ -42,7 +42,7 @@ export default function OnboardingPage() {
   };
 
   return (
-    <div className="relative flex size-full min-h-screen flex-col justify-between bg-background text-foreground">
+    <div className="relative flex size-full min-h-screen flex-col justify-between bg-neutral-50 text-neutral-900">
       <div>
         <div className="flex items-center p-4 pb-2 justify-center">
           <h2 className="text-lg font-bold leading-tight tracking-[-0.015em]">
@@ -72,7 +72,7 @@ export default function OnboardingPage() {
                   <h1 className="text-[22px] font-bold leading-tight tracking-[-0.015em] px-4 text-center pb-3 pt-5 font-headline">
                     {step.title}
                   </h1>
-                  <p className="text-muted-foreground text-base font-normal leading-normal pb-3 pt-1 px-4 text-center">
+                  <p className="text-neutral-600 text-base font-normal leading-normal pb-3 pt-1 px-4 text-center">
                     {step.description}
                   </p>
                 </div>
@@ -95,7 +95,7 @@ export default function OnboardingPage() {
               key={i}
               className={cn(
                 'h-2 w-2 rounded-full',
-                current === i + 1 ? 'bg-primary' : 'bg-muted'
+                current === i + 1 ? 'bg-primary' : 'bg-neutral-300'
               )}
             />
           ))}
