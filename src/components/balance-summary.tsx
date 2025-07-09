@@ -5,6 +5,7 @@ import type { Transaction } from '@/lib/types';
 
 interface BalanceSummaryProps {
   transactions: Transaction[];
+  title?: string;
 }
 
 const formatCurrency = (value: number) => {
@@ -14,7 +15,7 @@ const formatCurrency = (value: number) => {
   }).format(value);
 };
 
-export default function BalanceSummary({ transactions }: BalanceSummaryProps) {
+export default function BalanceSummary({ transactions, title = 'Balance Neto' }: BalanceSummaryProps) {
   const { total, income, expenses } = useMemo(() => {
     return transactions.reduce(
       (acc, t) => {
@@ -32,7 +33,7 @@ export default function BalanceSummary({ transactions }: BalanceSummaryProps) {
 
   return (
     <div>
-      <h2 className="text-[22px] font-bold leading-tight tracking-[-0.015em]">Balance Neto</h2>
+      <h2 className="text-[22px] font-bold leading-tight tracking-[-0.015em]">{title}</h2>
       <h2 className="tracking-light text-center text-[28px] font-bold leading-tight py-5">{formatCurrency(total)}</h2>
       <div className="flex flex-wrap gap-4">
         <div className="flex min-w-[158px] flex-1 flex-col gap-2 rounded-xl p-6 border">

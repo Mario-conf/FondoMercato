@@ -47,17 +47,14 @@ export default function StatsPage() {
         
         <div className="pt-5">
           <h2 className="text-white text-[22px] font-bold leading-tight tracking-[-0.015em] pb-3">
-            Gastos por Categoría (Este Mes)
+            Gastos por Categoría del mes actual
           </h2>
           <ExpensesByCategory transactions={currentMonthTransactions} />
         </div>
 
         {previousMonthTransactions.length > 0 && (
             <div className="pt-5">
-                <h2 className="text-white text-[22px] font-bold leading-tight tracking-[-0.015em] pb-3">
-                Resumen del Mes Anterior
-                </h2>
-                <BalanceSummary transactions={previousMonthTransactions} />
+                <BalanceSummary transactions={previousMonthTransactions} title="Balance Neto del Mes Anterior" />
             </div>
         )}
 
