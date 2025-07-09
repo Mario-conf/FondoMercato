@@ -18,6 +18,9 @@ import {
 } from '@/components/ui/form';
 import { useAuth } from '@/context/auth-provider';
 import { useToast } from '@/hooks/use-toast';
+import { Separator } from '@/components/ui/separator';
+import { Switch } from '@/components/ui/switch';
+import { Label } from '@/components/ui/label';
 
 const profileSchema = z.object({
   name: z.string().min(2, { message: 'El nombre debe tener al menos 2 caracteres.' }),
@@ -26,7 +29,7 @@ const profileSchema = z.object({
 
 export default function ProfileSettingsPage() {
   const router = useRouter();
-  const { user, updateUser } = useAuth();
+  const { user, updateUser, theme, setTheme } = useAuth();
   const { toast } = useToast();
 
   const form = useForm<z.infer<typeof profileSchema>>({
@@ -60,6 +63,10 @@ export default function ProfileSettingsPage() {
         description: error instanceof Error ? error.message : 'Ocurrió un error inesperado.',
       });
     }
+  };
+
+  const handleThemeChange = (checked: boolean) => {
+    setTheme(checked ? 'dark' : 'light');
   };
 
   return (
@@ -109,6 +116,23 @@ export default function ProfileSettingsPage() {
             </Button>
           </form>
         </Form>
+        <Separator className="my-8" />
+        <div className="space-y-2">
+            <h3 className="text-lg font-medium">Apariencia</h3>
+            <div className="flex items-center justify-between rounded-lg border p-4">
+                <div className="space-y-0.5">
+                    <Label htmlFor="dark-mode-switch" className="text-base">Modo Oscuro</Label>
+                    <p className="text-sm text-muted-foreground">
+                        Activa el modo oscuro para una experiencia visual diferente.
+                    </p>
+                </div>
+                <Switch
+                    id="dark-mode-switch"
+                    checked={theme === 'dark'}
+                    onCheckedChange={handleThemeChange}
+                />
+            </div>
+        </div>
       </main>
     </div>
   );

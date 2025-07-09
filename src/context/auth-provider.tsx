@@ -19,6 +19,8 @@ interface AuthContextType {
   updateUser: (data: { name: string; email: string }) => void;
   changePassword: (data: { currentPassword; newPassword }) => void;
   completeOnboarding: () => void;
+  theme: 'dark' | 'light';
+  setTheme: (theme: 'dark' | 'light') => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -27,6 +29,7 @@ const AUTH_KEY = 'Fondo Mercato_auth';
 const ONBOARDING_KEY = 'Fondo Mercato_onboarding_complete';
 const USERS_KEY = 'Fondo Mercato_users';
 const CURRENT_USER_EMAIL_KEY = 'Fondo Mercato_current_user_email';
+const THEME_KEY = 'Fondo Mercato_theme';
 
 const getRegisteredUsers = (): User[] => {
   if (typeof window !== 'undefined') {
@@ -58,6 +61,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [onboardingComplete, setOnboardingComplete] = useState<boolean>(false);
   const [isAuthLoading, setIsAuthLoading] = useState(true);
   const [isSplashScreenVisible, setIsSplashScreenVisible] = useState(true);
+  const [theme, setThemeState] = useState<'dark' | 'light'>('dark');
   const router = useRouter();
   const pathname = usePathname();
 
@@ -80,6 +84,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           setUser(currentUser || null);
         }
       }
+
+      const savedTheme = window.localStorage.getItem(THEME_KEY) as 'dark' | 'light' | null;
+      const initialTheme = savedTheme || 'dark';
+      setThemeState(initialTheme);
+      document.documentElement.classList.toggle('dark', initialTheme === 'dark');
+
     } catch (error) {
         console.error("Could not access localStorage", error);
     }
@@ -102,6 +112,16 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       router.push('/onboarding');
     }
   }, [isAuthenticated, onboardingComplete, isAuthLoading, isSplashScreenVisible, pathname, router]);
+
+  const setTheme = (newTheme: 'dark' | 'light') => {
+    try {
+      window.localStorage.setItem(THEME_KEY, newTheme);
+      setThemeState(newTheme);
+      document.documentElement.classList.toggle('dark', newTheme === 'dark');
+    } catch (error) {
+      console.error('Failed to set theme in localStorage:', error);
+    }
+  };
 
   const login = ({ email, password }: { email: string; password: string }) => {
     const users = getRegisteredUsers();
@@ -200,7 +220,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     router.push('/');
   };
 
-  const value = { isAuthenticated, user, login, logout, signup, updateUser, changePassword, completeOnboarding };
+  const value = { isAuthenticated, user, login, logout, signup, updateUser, changePassword, completeOnboarding, theme, setTheme };
 
   if (isSplashScreenVisible) {
     return <LoadingScreen />;

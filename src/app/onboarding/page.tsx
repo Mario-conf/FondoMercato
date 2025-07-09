@@ -42,10 +42,10 @@ export default function OnboardingPage() {
   };
 
   return (
-    <div className="relative flex size-full min-h-screen flex-col justify-between bg-neutral-100">
+    <div className="relative flex size-full min-h-screen flex-col justify-between bg-background text-foreground">
       <div>
         <div className="flex items-center p-4 pb-2 justify-center">
-          <h2 className="text-lg font-bold leading-tight tracking-[-0.015em] text-neutral-900">
+          <h2 className="text-lg font-bold leading-tight tracking-[-0.015em]">
             Fondo Mercato
           </h2>
         </div>
@@ -69,10 +69,10 @@ export default function OnboardingPage() {
                       />
                     </div>
                   </div>
-                  <h1 className="text-neutral-900 text-[22px] font-bold leading-tight tracking-[-0.015em] px-4 text-center pb-3 pt-5 font-headline">
+                  <h1 className="text-[22px] font-bold leading-tight tracking-[-0.015em] px-4 text-center pb-3 pt-5 font-headline">
                     {step.title}
                   </h1>
-                  <p className="text-neutral-600 text-base font-normal leading-normal pb-3 pt-1 px-4 text-center">
+                  <p className="text-muted-foreground text-base font-normal leading-normal pb-3 pt-1 px-4 text-center">
                     {step.description}
                   </p>
                 </div>

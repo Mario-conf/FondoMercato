@@ -4,8 +4,46 @@
 
 @layer base {
   :root {
-    --background: 338 38% 10%; /* #240f16 */
-    --foreground: 0 0% 100%; /* White */
+    --background: 0 0% 100%;
+    --foreground: 240 10% 3.9%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 240 10% 3.9%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 240 10% 3.9%;
+
+    --primary: 339 100% 50%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 0 0% 96.1%;
+    --secondary-foreground: 240 5.9% 10%;
+
+    --muted: 0 0% 96.1%;
+    --muted-foreground: 240 3.8% 46.1%;
+
+    --accent: 0 0% 94.1%;
+    --accent-foreground: 240 5.9% 10%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 0 0% 89.8%;
+    --input: 0 0% 89.8%;
+    --ring: 339 100% 50%;
+
+    --chart-1: 142 71% 45%;
+    --chart-2: 0 84% 60%;
+    --chart-3: 339 100% 50%;
+    --chart-4: 221 83% 53%;
+    --chart-5: 48 96% 51%;
+    
+    --radius: 0.75rem;
+  }
+
+  .dark {
+    --background: 338 38% 10%;
+    --foreground: 0 0% 100%;
 
     --card: 338 38% 10%;
     --card-foreground: 0 0% 100%;
@@ -13,30 +51,30 @@
     --popover: 338 38% 10%;
     --popover-foreground: 0 0% 100%;
 
-    --primary: 339 100% 50%; /* #ff0055 */
+    --primary: 339 100% 50%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 339 38% 15%; /* #361721 for nav */
-    --secondary-foreground: 339 31% 68%; /* #ce8da3 for inactive nav text */
+    --secondary: 339 38% 15%;
+    --secondary-foreground: 339 31% 68%;
 
     --muted: 339 38% 15%;
     --muted-foreground: 339 31% 68%;
 
-    --accent: 339 41% 21%; /* #4b202e for borders and hover */
+    --accent: 339 41% 21%;
     --accent-foreground: 0 0% 100%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 339 34% 33%; /* #6b2e42 */
+    --border: 339 34% 33%;
     --input: 339 41% 21%;
     --ring: 339 100% 50%;
 
-    --chart-1: 142 71% 45%; /* Green for income */
-    --chart-2: 0 84% 60%; /* Red for expense */
-    --chart-3: 339 100% 50%; /* Primary */
-    --chart-4: 221 83% 53%; /* Blue */
-    --chart-5: 48 96% 51%;  /* Yellow */
+    --chart-1: 142 71% 45%;
+    --chart-2: 0 84% 60%;
+    --chart-3: 339 100% 50%;
+    --chart-4: 221 83% 53%;
+    --chart-5: 48 96% 51%;
     
     --radius: 0.75rem;
   }
