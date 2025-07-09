@@ -45,13 +45,6 @@ export default function StatsPage() {
           <OverviewChart transactions={transactions} />
         </div>
 
-        <div className="pt-5">
-          <h2 className="text-white text-[22px] font-bold leading-tight tracking-[-0.015em] pb-3">
-            Resumen del Mes Actual
-          </h2>
-          <BalanceSummary transactions={currentMonthTransactions} />
-        </div>
-
         {previousMonthTransactions.length > 0 && (
             <div className="pt-5">
                 <h2 className="text-white text-[22px] font-bold leading-tight tracking-[-0.015em] pb-3">
