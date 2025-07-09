@@ -25,8 +25,6 @@ export default function LoadingScreen() {
         alt={appImages.loadingLogo.alt}
         width={150}
         height={150}
-        data-ai-hint={appImages.loadingLogo.hint}
-        unoptimized
       />
       <div className="w-64">
          <Progress value={progress} className="h-2 bg-accent/20" />

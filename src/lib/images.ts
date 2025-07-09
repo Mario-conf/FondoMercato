@@ -30,8 +30,8 @@ export const appImages = {
     },
   ],
   loadingLogo: {
-    src: 'https://placehold.co/150x150.png',
+    src: '/icons/fondomercatoisotipo.png',
     alt: 'Fondo Mercato Logo',
-    hint: 'monochrome logo',
+    hint: 'logo',
   },
 };
