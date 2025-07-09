@@ -44,6 +44,13 @@ export default function StatsPage() {
           </h2>
           <OverviewChart transactions={transactions} />
         </div>
+        
+        <div className="pt-5">
+          <h2 className="text-white text-[22px] font-bold leading-tight tracking-[-0.015em] pb-3">
+            Gastos por Categoría (Este Mes)
+          </h2>
+          <ExpensesByCategory transactions={currentMonthTransactions} />
+        </div>
 
         {previousMonthTransactions.length > 0 && (
             <div className="pt-5">
@@ -54,12 +61,6 @@ export default function StatsPage() {
             </div>
         )}
 
-        <div className="pt-5">
-          <h2 className="text-white text-[22px] font-bold leading-tight tracking-[-0.015em] pb-3">
-            Gastos por Categoría (Mes Actual)
-          </h2>
-          <ExpensesByCategory transactions={currentMonthTransactions} />
-        </div>
       </main>
     </div>
   );
