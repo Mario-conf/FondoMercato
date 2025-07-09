@@ -6,17 +6,23 @@ import { useData } from '@/context/data-provider';
 import { ArrowLeft } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useMemo } from 'react';
-import { isSameMonth } from 'date-fns';
+import { isSameMonth, subMonths } from 'date-fns';
 import BalanceSummary from '@/components/balance-summary';
 
 export default function StatsPage() {
   const { transactions } = useData();
   const router = useRouter();
 
+  const now = new Date();
+
   const currentMonthTransactions = useMemo(() => {
-    const now = new Date();
     return transactions.filter((t) => isSameMonth(t.date, now));
-  }, [transactions]);
+  }, [transactions, now]);
+
+  const previousMonthTransactions = useMemo(() => {
+    const previousMonth = subMonths(now, 1);
+    return transactions.filter((t) => isSameMonth(t.date, previousMonth));
+  }, [transactions, now]);
 
   return (
     <div className="min-h-screen bg-background text-foreground">
@@ -41,14 +47,23 @@ export default function StatsPage() {
 
         <div className="pt-5">
           <h2 className="text-white text-[22px] font-bold leading-tight tracking-[-0.015em] pb-3">
-            Resumen del Mes
+            Resumen del Mes Actual
           </h2>
           <BalanceSummary transactions={currentMonthTransactions} />
         </div>
 
+        {previousMonthTransactions.length > 0 && (
+            <div className="pt-5">
+                <h2 className="text-white text-[22px] font-bold leading-tight tracking-[-0.015em] pb-3">
+                Resumen del Mes Anterior
+                </h2>
+                <BalanceSummary transactions={previousMonthTransactions} />
+            </div>
+        )}
+
         <div className="pt-5">
           <h2 className="text-white text-[22px] font-bold leading-tight tracking-[-0.015em] pb-3">
-            Gastos por Categoría
+            Gastos por Categoría (Mes Actual)
           </h2>
           <ExpensesByCategory transactions={currentMonthTransactions} />
         </div>
