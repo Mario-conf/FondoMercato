@@ -60,7 +60,10 @@ export default function OnboardingPage() {
                         src={step.src}
                         alt={step.title}
                         fill
-                        className="object-cover"
+                        className={cn(
+                          'object-cover',
+                          index > 0 && 'object-top'
+                        )}
                         data-ai-hint={step.hint}
                         unoptimized
                       />

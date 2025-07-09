@@ -22,7 +22,7 @@ export const appImages = {
         'Establece límites de gasto por categoría y cumple tus metas de ahorro.',
     },
     {
-      src: '',
+      src: '/icons/stats.png',
       hint: 'charts graphs illustration',
       title: 'Visualiza tu Progreso',
       description:
